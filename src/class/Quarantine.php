@@ -84,12 +84,4 @@ abstract class Quarantine
         return $string;
     }
 
-//    private static function strToHex($string)
-//    {
-//        $hex = '';
-//        for ($i = 0; $i < strlen($string); $i++) {
-//            $hex .= dechex(ord($string[$i]));
-//        }
-//        return $hex;
-//    }
 }
