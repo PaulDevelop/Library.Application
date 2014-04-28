@@ -36,5 +36,10 @@
         "psr-4": {
             "Com\\PaulDevelop\\Library\\Application\\": "src/class"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }
 }
