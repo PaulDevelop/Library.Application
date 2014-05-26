@@ -16,15 +16,7 @@
     "config": {
         "vendor-dir": "lib/vendor"
     },
-    "repositories": [
-        {
-            "type": "pear",
-            "url": "http://pear.php.net"
-        }
-    ],
     "require": {
-        "pear-pear/pear": "0.9",
-        "pear-pear/HTTP": "1.4.1",
         "pauldevelop/library-common": "1.0.4@dev",
         "willdurand/negotiation" : "*"
     },
