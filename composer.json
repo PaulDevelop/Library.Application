@@ -25,7 +25,8 @@
     "require": {
         "pear-pear/pear": "0.9",
         "pear-pear/HTTP": "1.4.1",
-        "pauldevelop/library-common": "~1.0.3"
+        "pauldevelop/library-common": "1.0.4@dev",
+        "willdurand/negotiation" : "*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
@@ -39,7 +40,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "0.0.x-dev"
         }
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Com\PaulDevelop\Library\Application;
 
+use Negotiation\Negotiator;
+
 /**
  * RequestParser
  *
@@ -116,8 +118,17 @@ abstract class RequestParser
         if (array_key_exists('HTTP_ACCEPT', $_SERVER) && !empty($_SERVER['HTTP_ACCEPT'])) {
             $reflectionObj = new \ReflectionObject(new Formats());
             //require_once('HTTP.php');
-            $http = new \HTTP;
-            $format = $http->negotiateMimeType($reflectionObj->getConstants(), 'text/html');
+            //$http = new \HTTP;
+            //$format = $http->negotiateMimeType($reflectionObj->getConstants(), 'text/html');
+            //var_dump($format);
+            //$negotiator = new \Negotiation\Negotiator();
+            //$bestHeader = $negotiator->getBest('en; q=0.1, fr; q=0.4, fu; q=0.9, de; q=0.2');
+            $negotiator   = new \Negotiation\FormatNegotiator();
+            //$acceptHeader = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+            //$priorities   = array('text/html', 'application/json', '*/*');
+            $acceptHeader = $_SERVER['HTTP_ACCEPT'];
+            $priorities   = $reflectionObj->getConstants();
+            $format = $negotiator->getBest($acceptHeader, $priorities)->getValue();
         }
         if (array_key_exists('HTTP_PDT_ACCEPT', $_SERVER) && !empty($_SERVER['HTTP_PDT_ACCEPT'])) {
             $format = $_SERVER['HTTP_PDT_ACCEPT'];

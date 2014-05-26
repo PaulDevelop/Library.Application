@@ -2,6 +2,8 @@
 
 namespace Com\PaulDevelop\Library\Application;
 
+use \Com\PaulDevelop\Library\Common\ITemplate;
+
 /**
  * IController
  *

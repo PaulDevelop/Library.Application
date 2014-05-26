@@ -1,6 +1,6 @@
 {
     "name": "Com.PaulDevelop.Library.Application",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Commonly used classes to build web applications.",
     "devDependencies": {
         "grunt": "~0.4.2",
