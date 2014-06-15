@@ -73,6 +73,10 @@ class FolderMapping extends Base implements IMapping
         }
         $controllerClassName .= 'Controller';
 
+        if (!class_exists($controllerClassName)) {
+            $controllerClassName = 'DefaultTemplateController';
+        }
+
         // get template file name
         $templateFileName = $this->templatePath;
         if (substr($templateFileName, -1, 1) != DIRECTORY_SEPARATOR) {
