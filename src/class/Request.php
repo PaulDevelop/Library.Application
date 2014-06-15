@@ -12,187 +12,77 @@ use
  * @category Application
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
- * @property $Original
- * @property $Directory
- * @property $FileName
- * @property $Path
- * @property $Action
- * @property $SystemParameter
- * @property $PageParameter
- * @property $FlowParameter
- * @property $Category
- * @property $HttpMethod
- * @property $Format
+ *
+ * @property RequestInput $Input
+ * @property string $OriginalPath
+ * @property string $StrippedPath
+ * @property array $SystemParameter
+ * @property array $PageParameter
+ * @property array $GetParameter
+ * @property array $PostParameter
  */
 class Request extends Base
 {
-    #region member
-    /**
-     * Normalized original request string.
-     *
-     * @var string
-     */
-    private $original;
-    /**
-     * Associative array (string key, string value) of system parameter.
-     *
-     * @var array
-     */
+    private $input;
+
+    private $originalPath;
+    private $strippedPath;
+
+    private $pathParameter;
     private $systemParameter;
-    /**
-     * Associative array (string key, string value) of page parameter.
-     *
-     * @var array
-     */
-    private $pageParameter;
-    /**
-     * Associative array (string key, string value) of flow parameter.
-     *
-     * @var array
-     */
-    private $flowParameter;
-    /**
-     * Normalized request string without parameter and verbs.
-     *
-     * @var string
-     */
-    private $directory;
-    /**
-     * File name.
-     *
-     * @var string
-     */
-    private $fileName;
-    /**
-     * Normalized request string without parameter.
-     *
-     * @var string
-     */
-    private $path;
-    /**
-     * Verb of current request string.
-     *
-     * @var string
-     */
-    private $action;
-    /**
-     * First directory of Normalized original request string.
-     *
-     * @var string
-     */
-    private $category;
-    /**
-     * Http method (Get, Put, Post, Delete).
-     *
-     * @var string
-     */
-    private $httpMethod;
-    /**
-     * Data format to be delivered.
-     *
-     * @var string
-     */
-    private $format;
-    #endregion
+    private $getParameter;
+    private $postParameter;
 
-    #region constructor
     public function __construct(
-        $original = '',
-        $directory = '',
-        $fileName = '',
-        $path = '',
-        $action = '',
-        $systemParameter = '',
-        $pageParameter = '',
-        $flowParameter = '',
-        $category = '',
-        $httpMethod = '',
-        $format = ''
+        $input = null,
+        $originalPath = '',
+        $strippedPath = '',
+        $pathParameter = array(),
+        $systemParameter = array(),
+        $getParameter = array(),
+        $postParameter = array()
     ) {
-        $this->original = $original;
-        $this->directory = $directory;
-        $this->fileName = $fileName;
-        $this->path = $path;
-        $this->action = $action;
+        $this->input = $input;
+        $this->originalPath = $originalPath;
+        $this->strippedPath = $strippedPath;
+        $this->pathParameter = $pathParameter;
         $this->systemParameter = $systemParameter;
-        $this->pageParameter = $pageParameter;
-        $this->flowParameter = $flowParameter;
-        $this->category = $category;
-        $this->httpMethod = $httpMethod;
-        $this->format = $format;
+        $this->getParameter = $getParameter;
+        $this->postParameter = $postParameter;
     }
-    #endregion
 
-    #region methods
-    public function getParameter($name = '')
+    protected function getInput()
     {
-        // init
-        $result = null;
-
-        // action
-        if (array_key_exists($name, $this->flowParameter)) {
-            $result = $this->flowParameter[$name];
-        }
-
-        // return
-        return $result;
+        return $this->input;
     }
-    #endregion
 
-    #region properties
-    public function getOriginal()
+    protected function getOriginalPath()
     {
-        return $this->original;
+        return $this->originalPath;
     }
 
-    public function getSystemParameter()
+    protected function getStrippedPath()
+    {
+        return $this->strippedPath;
+    }
+
+    protected function getPathParameter()
+    {
+        return $this->pathParameter;
+    }
+
+    protected function getSystemParameter()
     {
         return $this->systemParameter;
     }
 
-    public function getPageParameter()
+    protected function getGetParameter()
     {
-        return $this->pageParameter;
+        return $this->getParameter;
     }
 
-    public function getFlowParameter()
+    protected function getPostParameter()
     {
-        return $this->flowParameter;
+        return $this->postParameter;
     }
-
-    public function getDirectory()
-    {
-        return $this->directory;
-    }
-
-    public function getFileName()
-    {
-        return $this->fileName;
-    }
-
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    public function getAction()
-    {
-        return $this->action;
-    }
-
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    public function getHttpMethod()
-    {
-        return $this->httpMethod;
-    }
-
-    public function getFormat()
-    {
-        return $this->format;
-    }
-    #endregion
 }

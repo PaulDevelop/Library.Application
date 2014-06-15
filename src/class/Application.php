@@ -11,7 +11,7 @@ use Com\PaulDevelop\Library\Common\Base;
  * @category Application
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
- * @property $Request
+ * @property Request $Request
  */
 class Application extends Base
 {

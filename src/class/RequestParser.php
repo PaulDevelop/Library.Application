@@ -2,7 +2,7 @@
 
 namespace Com\PaulDevelop\Library\Application;
 
-use Negotiation\Negotiator;
+//use Negotiation\Negotiator;
 
 /**
  * RequestParser
@@ -12,191 +12,76 @@ use Negotiation\Negotiator;
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
  */
-abstract class RequestParser
+class RequestParser
 {
     #region member
-    private static $verbs = array(
-        'index',
-        'list',
-        'add',
-        'edit',
-        'delete',
-        'search',
-        'process'
-    );
+    /**
+     * @var ISanitizer
+     */
+    private $sanitizer;
+    /**
+     * @var IValidator
+     */
+    private $validator;
+    #endregion
+
+    #region constructor
+    public function __construct(ISanitizer $sanitizer = null, IValidator $validator = null)
+    {
+        $this->sanitizer = $sanitizer;
+        $this->validator = $validator;
+    }
     #endregion
 
     #region methods
-    public static function parse(
-        $requestString = '',
-        $supportParseParameter = true,
-        $parameter = array()
-    ) {
-        // init
-        $result = null;
-        $original = '';
+    //public function parse($path = '', $supportParseParameter = true)
+    public function parse(IRequestInput $requestInput = null, $supportParseParameter = true)
+    {
+        $originalPath = ($requestInput->Path != '' && $requestInput->Path[0] == '/') ? substr($requestInput->Path, 1)
+            : $requestInput->Path;
+        $strippedPath = '';
+        $pathParameter = array();
         $systemParameter = array();
-        $pageParameter = array();
-        $flowParameter = array();
-        $directory = '';
-        $fileName = '';
-        $path = '';
-        $action = '';
-        $category = '';
-        $httpMethod = HttpVerbs::GET;
-        $format = Formats::HTML;
+        $getParameter = array();
+        $postParameter = array();
 
-        // action
-        $chunks = preg_split('/\//', $requestString, null, PREG_SPLIT_NO_EMPTY);
-        $chunkCount = 0;
-        foreach ($chunks as $chunk) {
-            // original
-            $original .= (!empty($original) ? '/' : '').$chunk;
-
-            // check, if chunk is parameter
-            if ($supportParseParameter && ($pos = strpos($chunk, "_")) > -1) {
-                $pos = strpos($chunk, "_");
-                $key = substr($chunk, 0, $pos);
-                $value = substr($chunk, $pos + 1, strlen($chunk) - strlen($key));
-                $systemParameter[$key] = $value;
-            } else {
-                if ($supportParseParameter && ($pos = strpos($chunk, "-")) > -1) {
-                    $pos = strpos($chunk, "-");
+        if ($supportParseParameter) {
+            $chunks = preg_split('/\//', $requestInput->Path, -1, PREG_SPLIT_NO_EMPTY);
+            foreach ($chunks as $chunk) {
+                if (($pos = strpos($chunk, '-')) !== false) {
                     $key = substr($chunk, 0, $pos);
-                    $value = substr($chunk, $pos + 1, strlen($chunk) - strlen($key));
-                    $pageParameter[$key] = $value;
-                } else { // chunk is directory
-                    // directory
-                    if (empty($path) || !in_array($chunk, self::$verbs)) {
-                        $directory .= (!empty($directory) ? '/' : '').$chunk;
-                    }
-
-                    // path
-                    $path .= (!empty($path) ? '/' : '').$chunk;
-
-                    // action
-                    $action = $chunk;
-
-                    // category
-                    $category = empty($category) ? $chunk : $category;
-                }
-            }
-            $chunkCount++;
-        }
-
-        // remove last part if it is verb
-        $chunks = preg_split('/\//', $path, null, PREG_SPLIT_NO_EMPTY);
-        if (count($chunks) > 0) {
-            $lastChunk = $chunks[count($chunks) - 1];
-            if (in_array($lastChunk, self::$verbs)) {
-                $path = implode('/', array_slice($chunks, 0, count($chunks) - 1));
-            }
-        }
-
-        // if action is no verb, set it to 'index'
-        if (!in_array($action, self::$verbs)) {
-            $action = 'index';
-        }
-
-        // if last part is file name, remove it
-        if (count($chunks) > 0) {
-            $fileName = $chunks[count($chunks) - 1];
-        }
-
-        if (preg_match('/.*?\.+?/', $fileName)) {
-            $path = implode('/', array_slice($chunks, 0, count($chunks) - 1));
-            $dc = preg_split('/\//', $directory);
-            $directory = implode('/', array_slice($dc, 0, count($dc) - 1));
-        } else {
-            $fileName = '';
-        }
-
-        // http method and format
-        if (array_key_exists('REQUEST_METHOD', $_SERVER) && !empty($_SERVER['REQUEST_METHOD'])) {
-            $httpMethod = $_SERVER['REQUEST_METHOD'];
-        }
-        if (array_key_exists('HTTP_ACCEPT', $_SERVER) && !empty($_SERVER['HTTP_ACCEPT'])) {
-            $reflectionObj = new \ReflectionObject(new Formats());
-            //require_once('HTTP.php');
-            //$http = new \HTTP;
-            //$format = $http->negotiateMimeType($reflectionObj->getConstants(), 'text/html');
-            //var_dump($format);
-            //$negotiator = new \Negotiation\Negotiator();
-            //$bestHeader = $negotiator->getBest('en; q=0.1, fr; q=0.4, fu; q=0.9, de; q=0.2');
-            $negotiator   = new \Negotiation\FormatNegotiator();
-            //$acceptHeader = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
-            //$priorities   = array('text/html', 'application/json', '*/*');
-            $acceptHeader = $_SERVER['HTTP_ACCEPT'];
-            $priorities   = $reflectionObj->getConstants();
-            $format = $negotiator->getBest($acceptHeader, $priorities)->getValue();
-        }
-        if (array_key_exists('HTTP_PDT_ACCEPT', $_SERVER) && !empty($_SERVER['HTTP_PDT_ACCEPT'])) {
-            $format = $_SERVER['HTTP_PDT_ACCEPT'];
-        }
-
-        // check parameter
-        $defaultValues = array();
-        $defaultValues['int'] = 0;
-        $defaultValues['double'] = 0.0;
-        $defaultValues['string'] = '';
-        $defaultValues['boolean'] = false;
-
-        // check input
-        if (array_key_exists($path, $parameter)
-            && array_key_exists($action, $parameter[$path])
-            && array_key_exists($httpMethod, $parameter[$path][$action])
-        ) {
-            foreach ($parameter[$path][$action][$httpMethod] as $parameterName => $parameterInfo) {
-                if ($httpMethod == 'GET') {
-                    $value = '';
-                    if (array_key_exists($parameterName, $_GET)) {
-                        if (array_key_exists($parameterName, $parameter[$path][$action][$httpMethod])) {
-                            $type = array_key_exists('type', $parameterInfo) ? $parameterInfo['type'] : null;
-                            $value = ($type != null) ?
-                                Quarantine::clean($_GET[$parameterName], $type) : $defaultValues[$type];
-                        }
-                    } else {
-                        $type = array_key_exists('type', $parameterInfo) ? $parameterInfo['type'] : null;
-                        $value = ($type != null) ? $defaultValues[$type] : null;
-                    }
-                    $flowParameter['get.'.$parameterName] = $value;
+                    $value = substr($chunk, $pos + 1);
+                    $pathParameter[$key] = $value;
+                } elseif (($pos = strpos($chunk, '_')) !== false) {
+                    $key = substr($chunk, 0, $pos);
+                    $value = substr($chunk, $pos + 1);
+                    $systemParameter[$key] = $value;
                 } else {
-                    if ($httpMethod == 'POST') {
-                        $value = '';
-                        if (array_key_exists($parameterName, $_POST)) {
-                            if (array_key_exists($parameterName, $_POST)) {
-                                if (array_key_exists($parameterName, $parameter[$path][$action][$httpMethod])) {
-                                    $type = array_key_exists('type', $parameterInfo) ? $parameterInfo['type'] : null;
-                                    $value = ($type != null) ?
-                                        Quarantine::clean($_POST[$parameterName], $type) : $defaultValues[$type];
-                                }
-                            } else {
-                                $type = array_key_exists('type', $parameterInfo) ? $parameterInfo['type'] : null;
-                                $value = ($type != null) ? $defaultValues[$type] : null;
-                            }
-                        }
-                        $flowParameter['post.'.$parameterName] = $value;
-                    }
+                    $strippedPath .= ($strippedPath == '' ? '' : '/').$chunk;
                 }
             }
         }
 
-        $result = new Request(
-            $original,
-            $directory,
-            $fileName,
-            $path,
-            $action,
-            $systemParameter,
-            $pageParameter,
-            $flowParameter,
-            $category,
-            $httpMethod,
-            $format
-        );
+        foreach ($_GET as $key => $value) {
+            $getParameter[$key] = $value;
+        }
+
+        foreach ($_POST as $key => $value) {
+            $postParameter[$key] = $value;
+        }
+
+        // TODO sanitize and validate
 
         // return
-        return $result;
+        return new Request(
+            $requestInput,
+            $originalPath,
+            $strippedPath,
+            $pathParameter,
+            $systemParameter,
+            $getParameter,
+            $postParameter
+        );
     }
     #endregion
 }
