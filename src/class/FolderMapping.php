@@ -38,6 +38,20 @@ class FolderMapping extends Base implements IMapping
 
     public function process(Request $request = null, ITemplate $template = null)
     {
+        // get template file name
+        $templateFileName = $this->templatePath;
+        if (substr($templateFileName, -1, 1) != DIRECTORY_SEPARATOR) {
+            $templateFileName .= DIRECTORY_SEPARATOR;
+        }
+
+        $templateFileName .= str_replace('/', '.', $request->StrippedPath);
+        if ($request->StrippedPath == '') {
+            $templateFileName .= 'index';
+        }
+
+        $templateFileName .= '.template.pdt';
+        $template->TemplateFileName = $templateFileName;
+
         // get controler class name
         $controllerClassName = $this->namespace;
         if (substr($controllerClassName, -1, 1) != '\\') {
@@ -73,26 +87,13 @@ class FolderMapping extends Base implements IMapping
         }
         $controllerClassName .= 'Controller';
 
-        if (!class_exists($controllerClassName)) {
-            $controllerClassName = 'DefaultTemplateController';
+        if ( class_exists($controllerClassName)) {
+            $controller = new $controllerClassName();
+        }
+        else {
+            $controller = new DefaultTemplateController();
         }
 
-        // get template file name
-        $templateFileName = $this->templatePath;
-        if (substr($templateFileName, -1, 1) != DIRECTORY_SEPARATOR) {
-            $templateFileName .= DIRECTORY_SEPARATOR;
-        }
-
-        $templateFileName .= str_replace('/', '.', $request->StrippedPath);
-        if ($request->StrippedPath == '') {
-            $templateFileName .= 'index';
-        }
-
-        $templateFileName .= '.template.pdt';
-        //$template = null; // new Template2();
-        $template->TemplateFileName = $templateFileName;
-
-        $controller = new $controllerClassName();
         /** @var IController $controller */
         return $controller->process($request, $template);
     }
