@@ -68,18 +68,18 @@ class UrlToFileMapper implements IUrlMapper
         foreach ($this->mappings as $mapping) {
             /** @var IMapping $mapping */
             if ($this->checkPattern($mapping->getPattern(), $request)) {
-                echo ' => MATCH<br />';
+                //echo ' => MATCH<br />';
                 //echo gettype($mapping);
                 //if ( get_class($mapping) == 'Com\PaulDevelop\TemplateRepository\ClassMapping' ) {
                 //    ///** @var ClassMapping $mapping */
                 //    $mapping->process();
                 //}
                 $result = $mapping->process($request);
-                //break;
+                break;
             } else {
-                echo ' => no match<br />';
+                //echo ' => no match<br />';
             }
-            echo '<hr />';
+            //echo '<hr />';
         }
 
         return $result;
