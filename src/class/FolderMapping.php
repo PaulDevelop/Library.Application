@@ -3,6 +3,7 @@
 namespace Com\PaulDevelop\Library\Application;
 
 use Com\PaulDevelop\Library\Common\Base;
+use Com\PaulDevelop\Library\Common\ITemplate;
 
 /**
  * FolderMapping
@@ -35,7 +36,7 @@ class FolderMapping extends Base implements IMapping
         $this->templatePath = $templatePath;
     }
 
-    public function process(Request $request)
+    public function process(Request $request = null, ITemplate $template = null)
     {
         // get controler class name
         $controllerClassName = $this->namespace;
@@ -84,7 +85,8 @@ class FolderMapping extends Base implements IMapping
         }
 
         $templateFileName .= '.template.pdt';
-        $template = null; // new Template2();
+        //$template = null; // new Template2();
+        $template->TemplateFileName = $templateFileName;
 
         $controller = new $controllerClassName();
         /** @var IController $controller */

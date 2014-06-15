@@ -4,6 +4,7 @@ namespace Com\PaulDevelop\Library\Application;
 
 //use Com\PaulDevelop\Library\Common\Constants;
 //use Com\PaulDevelop\Library\Template\Template;
+use Com\PaulDevelop\Library\Common\ITemplate;
 
 /**
  * UrlToFileMapper
@@ -55,11 +56,12 @@ class UrlToFileMapper implements IUrlMapper
     }
 
     /**
-     * @param Request $request
+     * @param Request   $request
+     * @param ITemplate $template
      *
      * @return string
      */
-    public function process(Request $request = null)
+    public function process(Request $request = null, ITemplate $template = null)
     {
         // init
         $result = '';
@@ -74,7 +76,7 @@ class UrlToFileMapper implements IUrlMapper
                 //    ///** @var ClassMapping $mapping */
                 //    $mapping->process();
                 //}
-                $result = $mapping->process($request);
+                $result = $mapping->process($request, $template);
                 break;
             } else {
                 //echo ' => no match<br />';
