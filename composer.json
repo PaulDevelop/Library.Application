@@ -17,7 +17,7 @@
         "vendor-dir": "lib/vendor"
     },
     "require": {
-        "pauldevelop/library-common": "1.0.4@dev",
+        "pauldevelop/library-common": "*@dev",
         "willdurand/negotiation" : "*"
     },
     "require-dev": {
