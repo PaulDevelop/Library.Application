@@ -2,8 +2,7 @@
 
 namespace Com\PaulDevelop\Library\Application;
 
-use
-    Com\PaulDevelop\Library\Common\Base;
+use Com\PaulDevelop\Library\Common\Base;
 
 /**
  * Request
@@ -14,12 +13,12 @@ use
  * @license  http://opensource.org/licenses/MIT MIT
  *
  * @property RequestInput $Input
- * @property string $OriginalPath
- * @property string $StrippedPath
- * @property array $SystemParameter
- * @property array $PageParameter
- * @property array $GetParameter
- * @property array $PostParameter
+ * @property string       $OriginalPath
+ * @property string       $StrippedPath
+ * @property array        $SystemParameter
+ * @property array        $PageParameter
+ * @property array        $GetParameter
+ * @property array        $PostParameter
  */
 class Request extends Base
 {
@@ -39,42 +38,42 @@ class Request extends Base
     private $strippedPath;
 
     /**
-     * @var array
+     * @var ParameterCollection
      */
     private $pathParameter;
 
     /**
-     * @var array
+     * @var ParameterCollection
      */
     private $systemParameter;
 
     /**
-     * @var array
+     * @var ParameterCollection
      */
     private $getParameter;
 
     /**
-     * @var array
+     * @var ParameterCollection
      */
     private $postParameter;
 
     /**
-     * @param IRequestInput $input
-     * @param string        $originalPath
-     * @param string        $strippedPath
-     * @param array         $pathParameter
-     * @param array         $systemParameter
-     * @param array         $getParameter
-     * @param array         $postParameter
+     * @param IRequestInput       $input
+     * @param string              $originalPath
+     * @param string              $strippedPath
+     * @param ParameterCollection $pathParameter
+     * @param ParameterCollection $systemParameter
+     * @param ParameterCollection $getParameter
+     * @param ParameterCollection $postParameter
      */
     public function __construct(
         IRequestInput $input = null,
         $originalPath = '',
         $strippedPath = '',
-        $pathParameter = array(),
-        $systemParameter = array(),
-        $getParameter = array(),
-        $postParameter = array()
+        ParameterCollection $pathParameter = null,
+        ParameterCollection $systemParameter = null,
+        ParameterCollection $getParameter = null,
+        ParameterCollection $postParameter = null
     ) {
         $this->input = $input;
         $this->originalPath = $originalPath;
@@ -115,7 +114,7 @@ class Request extends Base
     }
 
     /**
-     * @return array
+     * @return ParameterCollection
      */
     protected function getPathParameter()
     {
@@ -123,7 +122,7 @@ class Request extends Base
     }
 
     /**
-     * @return array
+     * @return ParameterCollection
      */
     protected function getSystemParameter()
     {
@@ -131,7 +130,7 @@ class Request extends Base
     }
 
     /**
-     * @return array
+     * @return ParameterCollection
      */
     protected function getGetParameter()
     {
@@ -139,7 +138,7 @@ class Request extends Base
     }
 
     /**
-     * @return array
+     * @return ParameterCollection
      */
     protected function getPostParameter()
     {

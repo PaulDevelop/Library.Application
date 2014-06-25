@@ -40,10 +40,10 @@ class RequestParser
         $originalPath = ($requestInput->Path != '' && $requestInput->Path[0] == '/') ? substr($requestInput->Path, 1)
             : $requestInput->Path;
         $strippedPath = '';
-        $pathParameter = array();
-        $systemParameter = array();
-        $getParameter = array();
-        $postParameter = array();
+        $pathParameter = new ParameterCollection();
+        $systemParameter = new ParameterCollection();
+        $getParameter = new ParameterCollection();
+        $postParameter = new ParameterCollection();
 
         if ($supportParseParameter) {
             $chunks = preg_split('/\//', $requestInput->Path, -1, PREG_SPLIT_NO_EMPTY);
@@ -51,11 +51,13 @@ class RequestParser
                 if (($pos = strpos($chunk, '-')) !== false) {
                     $key = substr($chunk, 0, $pos);
                     $value = substr($chunk, $pos + 1);
-                    $pathParameter[$key] = $value;
+                    //$pathParameter[$key] = $value;
+                    $pathParameter->add(new Parameter($key, $value), $key);
                 } elseif (($pos = strpos($chunk, '_')) !== false) {
                     $key = substr($chunk, 0, $pos);
                     $value = substr($chunk, $pos + 1);
-                    $systemParameter[$key] = $value;
+                    //$systemParameter[$key] = $value;
+                    $systemParameter->add(new Parameter($key, $value), $key);
                 } else {
                     $strippedPath .= ($strippedPath == '' ? '' : '/').$chunk;
                 }
@@ -63,11 +65,13 @@ class RequestParser
         }
 
         foreach ($_GET as $key => $value) {
-            $getParameter[$key] = $value;
+            //$getParameter[$key] = $value;
+            $getParameter->add(new Parameter($key, $value), $key);
         }
 
         foreach ($_POST as $key => $value) {
-            $postParameter[$key] = $value;
+            //$postParameter[$key] = $value;
+            $postParameter->add(new Parameter($key, $value), $key);
         }
 
         // TODO sanitize and validate

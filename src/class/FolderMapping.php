@@ -51,7 +51,7 @@ class FolderMapping extends Base implements IMapping
 
         $templateFileName .= '.template.pdt';
         //if ( file_exists($templateFileName) ) {
-          $template->TemplateFileName = $templateFileName;
+        $template->TemplateFileName = $templateFileName;
         //}
 
         // TODO: check, if template file exists
@@ -92,10 +92,9 @@ class FolderMapping extends Base implements IMapping
         }
         $controllerClassName .= 'Controller';
 
-        if ( class_exists($controllerClassName)) {
+        if (class_exists($controllerClassName)) {
             $controller = new $controllerClassName();
-        }
-        else {
+        } else {
             $controller = new DefaultTemplateController();
         }
 

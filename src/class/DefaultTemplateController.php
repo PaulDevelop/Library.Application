@@ -16,8 +16,8 @@ use Com\PaulDevelop\Library\Common\ITemplate;
  * @property string $ControllerPath
  * @property string $TemplatePath
  */
-class DefaultTemplateController implements IController {
-
+class DefaultTemplateController implements IController
+{
     /**
      * @param Request   $request
      * @param ITemplate $template
