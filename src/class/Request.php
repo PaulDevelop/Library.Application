@@ -23,18 +23,52 @@ use
  */
 class Request extends Base
 {
+    /**
+     * @var IRequestInput
+     */
     private $input;
 
+    /**
+     * @var string
+     */
     private $originalPath;
+
+    /**
+     * @var string
+     */
     private $strippedPath;
 
+    /**
+     * @var array
+     */
     private $pathParameter;
+
+    /**
+     * @var array
+     */
     private $systemParameter;
+
+    /**
+     * @var array
+     */
     private $getParameter;
+
+    /**
+     * @var array
+     */
     private $postParameter;
 
+    /**
+     * @param IRequestInput $input
+     * @param string        $originalPath
+     * @param string        $strippedPath
+     * @param array         $pathParameter
+     * @param array         $systemParameter
+     * @param array         $getParameter
+     * @param array         $postParameter
+     */
     public function __construct(
-        $input = null,
+        IRequestInput $input = null,
         $originalPath = '',
         $strippedPath = '',
         $pathParameter = array(),
@@ -51,36 +85,62 @@ class Request extends Base
         $this->postParameter = $postParameter;
     }
 
+    //public function getStdClass() {
+    //    $result = new \stdClass();
+    //    $result->input = $result->input->getStdClass();
+    //}
+
+    /**
+     * @return IRequestInput
+     */
     protected function getInput()
     {
         return $this->input;
     }
 
+    /**
+     * @return string
+     */
     protected function getOriginalPath()
     {
         return $this->originalPath;
     }
 
+    /**
+     * @return string
+     */
     protected function getStrippedPath()
     {
         return $this->strippedPath;
     }
 
+    /**
+     * @return array
+     */
     protected function getPathParameter()
     {
         return $this->pathParameter;
     }
 
+    /**
+     * @return array
+     */
     protected function getSystemParameter()
     {
         return $this->systemParameter;
     }
 
+    /**
+     * @return array
+     */
     protected function getGetParameter()
     {
         return $this->getParameter;
     }
 
+    /**
+     * @return array
+     */
     protected function getPostParameter()
     {
         return $this->postParameter;

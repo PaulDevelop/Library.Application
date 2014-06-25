@@ -50,7 +50,12 @@ class FolderMapping extends Base implements IMapping
         }
 
         $templateFileName .= '.template.pdt';
-        $template->TemplateFileName = $templateFileName;
+        //if ( file_exists($templateFileName) ) {
+          $template->TemplateFileName = $templateFileName;
+        //}
+
+        // TODO: check, if template file exists
+        // TODO: 404 (if template and / or controller file does not exist)
 
         // get controler class name
         $controllerClassName = $this->namespace;
