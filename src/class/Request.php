@@ -16,7 +16,7 @@ use Com\PaulDevelop\Library\Common\Base;
  * @property string       $OriginalPath
  * @property string       $StrippedPath
  * @property array        $SystemParameter
- * @property array        $PageParameter
+ * @property array        $PathParameter
  * @property array        $GetParameter
  * @property array        $PostParameter
  */
