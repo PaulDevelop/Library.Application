@@ -12,13 +12,13 @@ use Com\PaulDevelop\Library\Common\Base;
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
  *
- * @property RequestInput $Input
- * @property string       $OriginalPath
- * @property string       $StrippedPath
- * @property array        $SystemParameter
- * @property array        $PathParameter
- * @property array        $GetParameter
- * @property array        $PostParameter
+ * @property RequestInput        $Input
+ * @property string              $OriginalPath
+ * @property string              $StrippedPath
+ * @property ParameterCollection $SystemParameter
+ * @property ParameterCollection $PathParameter
+ * @property ParameterCollection $GetParameter
+ * @property ParameterCollection $PostParameter
  */
 class Request extends Base
 {
