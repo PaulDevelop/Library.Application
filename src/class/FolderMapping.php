@@ -44,8 +44,32 @@ class FolderMapping extends Base implements IMapping
             $templateFileName .= DIRECTORY_SEPARATOR;
         }
 
-        $templateFileName .= str_replace('/', '.', $request->StrippedPath);
-        if ($request->StrippedPath == '') {
+
+        //
+        $url = '';
+        if ($request->Input->Subdomains != '') {
+            $url .= $request->Input->Subdomains.'.';
+        }
+        $url .= $request->Input->Domain;
+        if ($request->StrippedPath != '') {
+            $url .= '/'.$request->StrippedPath;
+        }
+        $url = trim($url, "\t\n\r\0\x0B/");
+        $pattern = $this->Pattern;
+        $pattern = str_replace('*', '', $pattern);
+        $pattern = trim($pattern, "\t\n\r\0\x0B/");
+        $path = str_replace($pattern, '', $url);
+        $path = trim($path, "\t\n\r\0\x0B/");
+
+        //echo 'XXX';
+        //var_dump($path);
+
+        //$templateFileName .= str_replace('/', '.', $request->StrippedPath);
+        //if ($request->StrippedPath == '') {
+        //    $templateFileName .= 'index';
+        //}
+        $templateFileName .= str_replace('/', '.', $path);
+        if ($path == '') {
             $templateFileName .= 'index';
         }
 
@@ -53,6 +77,7 @@ class FolderMapping extends Base implements IMapping
         //if ( file_exists($templateFileName) ) {
         $template->TemplateFileName = $templateFileName;
         //}
+
 
         // TODO: check, if template file exists
         // TODO: 404 (if template and / or controller file does not exist)

@@ -80,7 +80,14 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
         $input = new RequestInput('some/path/id-1/');
         $rp = new RequestParser(new Sanitizer(), new Validator());
         $request = $rp->parse($input);
-        var_dump($request);
+        //var_dump($request);
+
+        $this->assertEquals('some/path/id-1/', $request->OriginalPath);
+        $this->assertEquals('some/path', $request->StrippedPath);
+        $pc = new ParameterCollection();
+        $pc->add(new Parameter('id', 1), 'id');
+        $this->assertEquals($pc, $request->PathParameter);
+
         //RequestParser::parse('some/path', false, array());
     }
 

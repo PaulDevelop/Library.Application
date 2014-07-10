@@ -2,6 +2,10 @@
 
 namespace Com\PaulDevelop\Library\Application;
 
+define('APP_FS_CONTROLLER', 'path/to/controller/');
+define('APP_FS_TEMPLATE', 'path/to/templates/');
+
+/*
 class MyRequestHandler extends RequestHandler
 {
     public function __construct()
@@ -48,14 +52,117 @@ class MyRequestHandler extends RequestHandler
         parent::OnRequestHandled($app);
     }
 }
+*/
+
+use Com\PaulDevelop\Library\Common\Base;
+use Com\PaulDevelop\Library\Common\ITemplate;
+
+class MyTemplate extends Base implements ITemplate {
+    private $templateFileName = '';
+
+    /**
+     * @return string
+     */
+    public function process()
+    {
+        // TODO: Implement process() method.
+        //echo 'Template Content'.PHP_EOL;
+        //var_dump($this->TemplateFileName);
+    }
+
+    public function setTemplateFileName($templateFileName = '')
+    {
+        $this->templateFileName = $templateFileName;
+    }
+
+    public function getTemplateFileName()
+    {
+        return $this->templateFileName;
+    }
+}
+
+class MyRequestInputBackendFolder extends Base implements IRequestInput {
+    public function getMethod()
+    {
+        return 'GET';
+    }
+
+    public function getProtocol()
+    {
+        return 'http';
+    }
+
+    public function getSubdomains()
+    {
+        return '';
+    }
+
+    public function getDomain()
+    {
+        return 'pauldevelop.com';
+    }
+
+    public function getPort()
+    {
+        return '81';
+    }
+
+    public function getPath()
+    {
+        return 'backend/user/edit/id-1/';
+    }
+
+    public function getFormat()
+    {
+        return 'text/html';
+    }
+}
+
+class MyRequestInputBackendSubdomain extends Base implements IRequestInput {
+    public function getMethod()
+    {
+        return 'GET';
+    }
+
+    public function getProtocol()
+    {
+        return 'http';
+    }
+
+    public function getSubdomains()
+    {
+        return 'backend';
+    }
+
+    public function getDomain()
+    {
+        return 'pauldevelop.com';
+    }
+
+    public function getPort()
+    {
+        return '81';
+    }
+
+    public function getPath()
+    {
+        return 'user/edit/id-1/';
+    }
+
+    public function getFormat()
+    {
+        return 'text/html';
+    }
+}
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function testRequest()
+    public function testMappingBackendFolder()
     {
+/*
 //        $baseObj = new BaseObject();
 //        $this->assertEquals('property value', $baseObj->Property);
         $requestHandler = new RequestHandler();
@@ -72,6 +179,60 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         //$request = $application->Request;
         //var_dump($request);
+*/
+        //echo "FOLDER".PHP_EOL;
+        $mapper = new UrlToFileMapper();
+        $mapper->mapFolder(
+            'pauldevelop.com/backend/*',
+            'De\Welt\JobPortal\Controller\Backend',
+            APP_FS_CONTROLLER.'',
+            APP_FS_TEMPLATE.'backend'
+        );
+        //$mapper->mapFolder(
+        //    'pauldevelop.com.info/*',
+        //    'De\Welt\JobPortal\Controller\Frontend',
+        //    APP_FS_CONTROLLER.'',
+        //    APP_FS_TEMPLATE.'frontend'
+        //);
+        //$ri = new MyRequestInput();
+        //var_dump($ri->Path);die;
+
+        $rp = new RequestParser(new Sanitizer(), new Validator());
+        $request = $rp->parse(new MyRequestInputBackendFolder());
+
+        $template = new MyTemplate();
+
+        $output = $mapper->process($request, $template);
+        //var_dump($template->TemplateFileName);
+        //echo $output;
+        //die;
+        //echo $template->TemplateFileName;
+
+        $this->assertEquals('path/to/templates/backend/user.edit.template.pdt', $template->TemplateFileName);
     }
 
+    /**
+     * @test
+     */
+    public function testMappingBackendSubdomain()
+    {
+        //echo "SUBDOMAIN".PHP_EOL;
+        $mapper = new UrlToFileMapper();
+        $mapper->mapFolder(
+            'backend.pauldevelop.com/*',
+            'De\Welt\JobPortal\Controller\Backend',
+            APP_FS_CONTROLLER.'',
+            APP_FS_TEMPLATE.'backend'
+        );
+        $rp = new RequestParser(new Sanitizer(), new Validator());
+        //$request = $rp->parse(new MyRequestInputBackendFolder());
+        $request = $rp->parse(new MyRequestInputBackendSubdomain());
+
+        $template = new MyTemplate();
+
+        $output = $mapper->process($request, $template);
+        //var_dump($template->TemplateFileName);
+        //die;
+        $this->assertEquals('path/to/templates/backend/user.edit.template.pdt', $template->TemplateFileName);
+    }
 }

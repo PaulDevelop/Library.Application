@@ -4,8 +4,11 @@
     <filter>
     </filter>
     <testsuites>
-        <testsuite name="PdLibrary.Common">
+        <testsuite name="Library.Application">
+            <!--
             <directory suffix=".php">.</directory>
+            -->
+            <file>ApplicationTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
