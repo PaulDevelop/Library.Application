@@ -51,6 +51,9 @@ class FolderMapping extends Base implements IMapping
             $url .= $request->Input->Subdomains.'.';
         }
         $url .= $request->Input->Domain;
+        if ( $request->Input->Port != '' ) {
+            $url .= ':'.$request->Input->Port;
+        }
         if ($request->StrippedPath != '') {
             $url .= '/'.$request->StrippedPath;
         }
@@ -60,6 +63,8 @@ class FolderMapping extends Base implements IMapping
         $pattern = trim($pattern, "\t\n\r\0\x0B/");
         $path = str_replace($pattern, '', $url);
         $path = trim($path, "\t\n\r\0\x0B/");
+
+        $template->bindVariable('base', $request->Input->Protocol.'://'.$pattern.'/');
 
         //echo 'XXX';
         //var_dump($path);

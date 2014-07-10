@@ -114,6 +114,9 @@ class UrlToFileMapper implements IUrlMapper
             $path .= $request->Input->Subdomains.'.';
         }
         $path .= $request->Input->Domain;
+        if ( $request->Input->Port != '' ) {
+            $path .= ':'.$request->Input->Port;
+        }
         if ($request->StrippedPath != '') {
             $path .= '/'.$request->StrippedPath;
         }
