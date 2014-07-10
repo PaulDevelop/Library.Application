@@ -45,7 +45,7 @@ class FolderMapping extends Base implements IMapping
         }
 
 
-        //
+        // path = url - pattern
         $url = '';
         if ($request->Input->Subdomains != '') {
             $url .= $request->Input->Subdomains.'.';
@@ -87,7 +87,7 @@ class FolderMapping extends Base implements IMapping
         // TODO: check, if template file exists
         // TODO: 404 (if template and / or controller file does not exist)
 
-        // get controler class name
+        // get controller class name
         $controllerClassName = $this->namespace;
         if (substr($controllerClassName, -1, 1) != '\\') {
             $controllerClassName .= '\\';
@@ -109,7 +109,8 @@ class FolderMapping extends Base implements IMapping
                 $controllerClassName .= 'Html';
         }
 
-        $chunks = preg_split('/\//', $request->StrippedPath);
+        //$chunks = preg_split('/\//', $request->StrippedPath);
+        $chunks = preg_split('/\//', $path);
         array_walk(
             $chunks,
             function (&$chunk) {
