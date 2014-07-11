@@ -79,6 +79,11 @@ class MyTemplate extends Base implements ITemplate {
     {
         return $this->templateFileName;
     }
+
+    public function bindVariable($variableName = '', $content = null)
+    {
+        // TODO: Implement bindVariable() method.
+    }
 }
 
 class MyRequestInputBackendFolder extends Base implements IRequestInput {
@@ -183,7 +188,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         //echo "FOLDER".PHP_EOL;
         $mapper = new UrlToFileMapper();
         $mapper->mapFolder(
-            'pauldevelop.com/backend/*',
+            'pauldevelop.com:81/backend/*',
             'De\Welt\JobPortal\Controller\Backend',
             APP_FS_CONTROLLER.'',
             APP_FS_TEMPLATE.'backend'
@@ -208,7 +213,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         //die;
         //echo $template->TemplateFileName;
 
-        $this->assertEquals('path/to/templates/backend/user.edit.template.pdt', $template->TemplateFileName);
+        $this->assertEquals('path/to/templates/backend/html.user.edit.template.pdt', $template->TemplateFileName);
     }
 
     /**
@@ -219,7 +224,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         //echo "SUBDOMAIN".PHP_EOL;
         $mapper = new UrlToFileMapper();
         $mapper->mapFolder(
-            'backend.pauldevelop.com/*',
+            'backend.pauldevelop.com:81/*',
             'De\Welt\JobPortal\Controller\Backend',
             APP_FS_CONTROLLER.'',
             APP_FS_TEMPLATE.'backend'
@@ -233,6 +238,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $output = $mapper->process($request, $template);
         //var_dump($template->TemplateFileName);
         //die;
-        $this->assertEquals('path/to/templates/backend/user.edit.template.pdt', $template->TemplateFileName);
+        $this->assertEquals('path/to/templates/backend/html.user.edit.template.pdt', $template->TemplateFileName);
     }
 }

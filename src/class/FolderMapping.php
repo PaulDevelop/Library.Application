@@ -73,6 +73,26 @@ class FolderMapping extends Base implements IMapping
         //if ($request->StrippedPath == '') {
         //    $templateFileName .= 'index';
         //}
+
+        $formatPrefix = '';
+        switch ($request->Input->Format) {
+            case Formats::HTML:
+                $formatPrefix = 'html';
+                break;
+            case Formats::JSON:
+                $formatPrefix = 'json';
+                break;
+            case Formats::SOAP:
+                $formatPrefix = 'xml';
+                break;
+            case Formats::XML:
+                $formatPrefix = 'xml';
+                break;
+            default:
+                $formatPrefix = 'html';
+        }
+        $templateFileName .= $formatPrefix.'.';
+
         $templateFileName .= str_replace('/', '.', $path);
         if ($path == '') {
             $templateFileName .= 'index';
