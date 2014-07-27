@@ -13,25 +13,29 @@ use Com\PaulDevelop\Library\Common\ITemplate;
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
  * @property string $Pattern
- * @property string $Namespace
+ * @property array $Namespaces
+ * @property string $SubNamespace
  * @property string $ControllerPath
  * @property string $TemplatePath
  */
 class FolderMapping extends Base implements IMapping
 {
     private $pattern;
-    private $namespace;
+    private $namespaces;
+    private $subNamespace;
     private $controllerPath;
     private $templatePath;
 
     public function __construct(
         $pattern = '',
-        $namespace = '',
+        $namespaces = '',
+        $subNamespace = '',
         $controllerPath = '',
         $templatePath = ''
     ) {
         $this->pattern = $pattern;
-        $this->namespace = $namespace;
+        $this->namespaces = $namespaces;
+        $this->subNamespace = $subNamespace;
         $this->controllerPath = $controllerPath;
         $this->templatePath = $templatePath;
     }
@@ -43,7 +47,6 @@ class FolderMapping extends Base implements IMapping
         if (substr($templateFileName, -1, 1) != DIRECTORY_SEPARATOR) {
             $templateFileName .= DIRECTORY_SEPARATOR;
         }
-
 
         // path = url - pattern
         $url = '';
@@ -108,10 +111,11 @@ class FolderMapping extends Base implements IMapping
         // TODO: 404 (if template and / or controller file does not exist)
 
         // get controller class name
-        $controllerClassName = $this->namespace;
-        if (substr($controllerClassName, -1, 1) != '\\') {
-            $controllerClassName .= '\\';
-        }
+        //$controllerClassName = $this->namespace;
+        //if (substr($controllerClassName, -1, 1) != '\\') {
+        //    $controllerClassName .= '\\';
+        //}
+        $controllerClassName = '';
         switch ($request->Input->Format) {
             case Formats::HTML:
                 $controllerClassName .= 'Html';
@@ -143,11 +147,24 @@ class FolderMapping extends Base implements IMapping
         }
         $controllerClassName .= 'Controller';
 
-        if (class_exists($controllerClassName)) {
-            $controller = new $controllerClassName();
-        } else {
+        $controller = null;
+        foreach ( $this->namespaces as $namespace ) {
+            $fullControllerClassName = $namespace.'\\'.$this->SubNamespace.'\\'.$controllerClassName;
+            if (class_exists($fullControllerClassName)) {
+                $controller = new $fullControllerClassName();
+                break;
+            }
+        }
+
+        if ( $controller == null ) {
             $controller = new DefaultTemplateController();
         }
+
+        //if (class_exists($controllerClassName)) {
+        //    $controller = new $controllerClassName();
+        //} else {
+        //    $controller = new DefaultTemplateController();
+        //}
 
         /** @var IController $controller */
         return $controller->process($request, $template);
@@ -158,9 +175,14 @@ class FolderMapping extends Base implements IMapping
         return $this->pattern;
     }
 
-    protected function getNamespace()
+    protected function getNamespaces()
     {
-        return $this->namespace;
+        return $this->namespaces;
+    }
+
+    protected function getSubNamespace()
+    {
+        return $this->subNamespace;
     }
 
     protected function getControllerPath()

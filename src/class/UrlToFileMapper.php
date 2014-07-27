@@ -18,16 +18,12 @@ class UrlToFileMapper implements IUrlMapper
 {
     #region member
     private $mappings;
-    private $templatePath;
-    private $controllerPath;
     #endregion
 
     #region constructor
-    public function __construct($templatePath = '', $controllerPath = '')
+    public function __construct()
     {
         $this->mappings = new IMappingCollection();
-        $this->templatePath = $templatePath;
-        $this->controllerPath = $controllerPath;
     }
     #endregion
 
@@ -70,18 +66,9 @@ class UrlToFileMapper implements IUrlMapper
         foreach ($this->mappings as $mapping) {
             /** @var IMapping $mapping */
             if ($this->checkPattern($mapping->getPattern(), $request)) {
-                //echo ' => MATCH<br />';
-                //echo gettype($mapping);
-                //if ( get_class($mapping) == 'Com\PaulDevelop\TemplateRepository\ClassMapping' ) {
-                //    ///** @var ClassMapping $mapping */
-                //    $mapping->process();
-                //}
                 $result = $mapping->process($request, $template);
                 break;
-            } else {
-                //echo ' => no match<br />';
             }
-            //echo '<hr />';
         }
 
         return $result;
