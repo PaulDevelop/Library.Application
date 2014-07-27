@@ -17,6 +17,9 @@ use Com\PaulDevelop\Library\Common\ITemplate;
 class UrlToFileMapper implements IUrlMapper
 {
     #region member
+    /**
+     * @var IMappingCollection
+     */
     private $mappings;
     #endregion
 
@@ -28,6 +31,15 @@ class UrlToFileMapper implements IUrlMapper
     #endregion
 
     #region methods
+    /**
+     * @param string $pattern
+     * @param string $namespace
+     * @param string $controllerPath
+     * @param string $templatePath
+     *
+     * @throws \Com\PaulDevelop\Library\Common\ArgumentException
+     * @throws \Com\PaulDevelop\Library\Common\TypeCheckException
+     */
     public function mapFolder(
         $pattern = '',
         $namespace = '',
@@ -37,6 +49,13 @@ class UrlToFileMapper implements IUrlMapper
         $this->mappings->add(new FolderMapping($pattern, $namespace, $controllerPath, $templatePath), $pattern);
     }
 
+    /**
+     * @param string      $pattern
+     * @param IController $object
+     *
+     * @throws \Com\PaulDevelop\Library\Common\ArgumentException
+     * @throws \Com\PaulDevelop\Library\Common\TypeCheckException
+     */
     public function mapClass(
         $pattern = '',
         IController $object = null
@@ -44,6 +63,13 @@ class UrlToFileMapper implements IUrlMapper
         $this->mappings->add(new ClassMapping($pattern, $object), $pattern);
     }
 
+    /**
+     * @param string $pattern
+     * @param null   $function
+     *
+     * @throws \Com\PaulDevelop\Library\Common\ArgumentException
+     * @throws \Com\PaulDevelop\Library\Common\TypeCheckException
+     */
     public function mapFunction(
         $pattern = '',
         $function = null
@@ -74,6 +100,12 @@ class UrlToFileMapper implements IUrlMapper
         return $result;
     }
 
+    /**
+     * @param string  $pattern
+     * @param Request $request
+     *
+     * @return int
+     */
     private function checkPattern($pattern = '', Request $request = null)
     {
         // ^(subdomain\.)*domain(\/(folder\/)*(file\.ext)?)?$

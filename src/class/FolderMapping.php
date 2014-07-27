@@ -20,15 +20,41 @@ use Com\PaulDevelop\Library\Common\ITemplate;
  */
 class FolderMapping extends Base implements IMapping
 {
+    /**
+     * @var string
+     */
     private $pattern;
+
+    /**
+     * @var array
+     */
     private $namespaces;
+
+    /**
+     * @var string
+     */
     private $subNamespace;
+
+    /**
+     * @var string
+     */
     private $controllerPath;
+
+    /**
+     * @var string
+     */
     private $templatePath;
 
+    /**
+     * @param string $pattern
+     * @param array  $namespaces
+     * @param string $subNamespace
+     * @param string $controllerPath
+     * @param string $templatePath
+     */
     public function __construct(
         $pattern = '',
-        $namespaces = '',
+        $namespaces = array(),
         $subNamespace = '',
         $controllerPath = '',
         $templatePath = ''
@@ -40,6 +66,12 @@ class FolderMapping extends Base implements IMapping
         $this->templatePath = $templatePath;
     }
 
+    /**
+     * @param Request   $request
+     * @param ITemplate $template
+     *
+     * @return string
+     */
     public function process(Request $request = null, ITemplate $template = null)
     {
         // get template file name
@@ -170,26 +202,41 @@ class FolderMapping extends Base implements IMapping
         return $controller->process($request, $template);
     }
 
+    /**
+     * @return string
+     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
+    /**
+     * @return array
+     */
     protected function getNamespaces()
     {
         return $this->namespaces;
     }
 
+    /**
+     * @return string
+     */
     protected function getSubNamespace()
     {
         return $this->subNamespace;
     }
 
+    /**
+     * @return string
+     */
     protected function getControllerPath()
     {
         return $this->controllerPath;
     }
 
+    /**
+     * @return string
+     */
     protected function getTemplatePath()
     {
         return $this->templatePath;
