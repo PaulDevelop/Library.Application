@@ -33,7 +33,8 @@ class UrlToFileMapper implements IUrlMapper
     #region methods
     /**
      * @param string $pattern
-     * @param string $namespace
+     * @param array  $namespaces
+     * @param string $subNamespace
      * @param string $controllerPath
      * @param string $templatePath
      *
@@ -42,11 +43,12 @@ class UrlToFileMapper implements IUrlMapper
      */
     public function mapFolder(
         $pattern = '',
-        $namespace = '',
+        $namespaces = array(),
+        $subNamespace = '',
         $controllerPath = '',
         $templatePath = ''
     ) {
-        $this->mappings->add(new FolderMapping($pattern, $namespace, $controllerPath, $templatePath), $pattern);
+        $this->mappings->add(new FolderMapping($pattern, $namespaces, $subNamespace, $controllerPath, $templatePath), $pattern);
     }
 
     /**
