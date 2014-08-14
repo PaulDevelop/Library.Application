@@ -160,6 +160,57 @@ class MyRequestInputBackendSubdomain extends Base implements IRequestInput {
     }
 }
 
+class MyRequestInputRegexPattern extends Base implements IRequestInput {
+    public function getMethod()
+    {
+        return 'GET';
+    }
+
+    public function getProtocol()
+    {
+        return 'http';
+    }
+
+    public function getSubdomains()
+    {
+        return '';
+    }
+
+    public function getDomain()
+    {
+        return 'pauldevelop.com';
+    }
+
+    public function getPort()
+    {
+        return '81';
+    }
+
+    public function getPath()
+    {
+        return '5r6n9a-Tiere-im-Urlaub';
+    }
+
+    public function getFormat()
+    {
+        return 'text/html';
+    }
+}
+
+class MyRequestInputRegexPatternController implements IController {
+
+    /**
+     * @param Request   $request
+     * @param ITemplate $template
+     *
+     * @return string
+     */
+    public function process(Request $request = null, ITemplate $template = null)
+    {
+        return 'regex pattern controller';
+    }
+}
+
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -188,8 +239,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         //echo "FOLDER".PHP_EOL;
         $mapper = new UrlToFileMapper();
         $mapper->mapFolder(
-            'pauldevelop.com:81/backend/*',
-            'De\Welt\JobPortal\Controller\Backend',
+            '^pauldevelop\.com:81\/backend\/',
+            array('De\Welt\JobPortal'),
+            'Controller\Backend',
             APP_FS_CONTROLLER.'',
             APP_FS_TEMPLATE.'backend'
         );
@@ -224,8 +276,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         //echo "SUBDOMAIN".PHP_EOL;
         $mapper = new UrlToFileMapper();
         $mapper->mapFolder(
-            'backend.pauldevelop.com:81/*',
-            'De\Welt\JobPortal\Controller\Backend',
+            '^backend\.pauldevelop\.com:81\/*',
+            array('De\Welt\JobPortal'),
+            'Controller\Backend',
             APP_FS_CONTROLLER.'',
             APP_FS_TEMPLATE.'backend'
         );
@@ -239,5 +292,29 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         //var_dump($template->TemplateFileName);
         //die;
         $this->assertEquals('path/to/templates/backend/html.user.edit.template.pdt', $template->TemplateFileName);
+    }
+
+    /**
+     * @test
+     */
+    public function testMappingRegexPattern()
+    {
+        //echo "SUBDOMAIN".PHP_EOL;
+        $mapper = new UrlToFileMapper();
+        $mapper->mapClass(
+            '^pauldevelop\.com:81\/[a-z0-9]{6}.*?',
+            new MyRequestInputRegexPatternController()
+        );
+        $rp = new RequestParser(new Sanitizer(), new Validator());
+        //$request = $rp->parse(new MyRequestInputBackendFolder());
+        $request = $rp->parse(new MyRequestInputRegexPattern(), false);
+//var_dump($request);die;
+        $template = new MyTemplate();
+
+        $output = $mapper->process($request, $template);
+        $this->assertEquals('regex pattern controller', $output);
+        //var_dump($template->TemplateFileName);
+        //die;
+        //$this->assertEquals('path/to/templates/backend/html.user.edit.template.pdt', $template->TemplateFileName);
     }
 }

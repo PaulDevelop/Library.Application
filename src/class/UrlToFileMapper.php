@@ -113,6 +113,7 @@ class UrlToFileMapper implements IUrlMapper
         // ^(subdomain\.)*domain(\/(folder\/)*(file\.ext)?)?$
 
         // pattern
+        /*
         $pattern = trim($pattern, "\t\n\r\0\x0B/");
         if (($pos = strpos($pattern, '/*')) !== false) {
             $pattern = substr($pattern, 0, $pos);
@@ -127,7 +128,9 @@ class UrlToFileMapper implements IUrlMapper
         }
         $pattern = str_replace('.', '\.', $pattern);
         $pattern = str_replace('/', '\/', $pattern);
+        */
         $pattern = '/'.$pattern.'/';
+//        var_dump($pattern);
 
         // path
         $path = '';
@@ -142,10 +145,10 @@ class UrlToFileMapper implements IUrlMapper
             $path .= '/'.$request->StrippedPath;
         }
         $path = trim($path, "\t\n\r\0\x0B/");
-
+//        var_dump($path);
         // match
         $result = preg_match($pattern, $path);
-
+//        var_dump($result);
         // return
         return $result;
     }

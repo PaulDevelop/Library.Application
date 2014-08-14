@@ -39,7 +39,7 @@ class RequestParser
     {
         $originalPath = ($requestInput->Path != '' && $requestInput->Path[0] == '/') ? substr($requestInput->Path, 1)
             : $requestInput->Path;
-        $strippedPath = '';
+        $strippedPath = ( !$supportParseParameter ) ? $originalPath : '';
         $pathParameter = new ParameterCollection();
         $systemParameter = new ParameterCollection();
         $getParameter = new ParameterCollection();
