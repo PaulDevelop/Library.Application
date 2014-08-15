@@ -3,6 +3,7 @@
 namespace Com\PaulDevelop\Library\Application;
 
 use Com\PaulDevelop\Library\Common\Base;
+use Com\PaulDevelop\Library\Common\ITemplate;
 
 /**
  * ClassMapping
@@ -30,9 +31,9 @@ class ClassMapping extends Base implements IMapping
         $this->object = $object;
     }
 
-    public function process(Request $request = null)
+    public function process(Request $request = null, ITemplate $template = null)
     {
-        return $this->object->process($request);
+        return $this->object->process($request, $template);
     }
 
     public function getPattern()
