@@ -39,7 +39,6 @@ class RequestInput extends Base implements IRequestInput
 
     public function __construct($url = '')
     {
-        $this->url = $url;
         $this->method = '';
         $this->protocol = '';
         $this->subdomains = '';
@@ -79,6 +78,8 @@ class RequestInput extends Base implements IRequestInput
         if ($url == '') {
             $url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         }
+        $this->url = $url;
+
         $parts = parse_url($url);
         //var_dump($parts);
 
