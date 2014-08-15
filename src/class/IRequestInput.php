@@ -10,27 +10,66 @@ namespace Com\PaulDevelop\Library\Application;
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
  *
- * @property string $Method
- * @property string $Protocol
- * @property string $Subdomains
- * @property string $Domain
- * @property string $Port
- * @property string $Path
- * @property string $Format
+ * @property string              $Url
+ * @property string              $Method
+ * @property string              $Protocol
+ * @property string              $Subdomains
+ * @property string              $Domain
+ * @property string              $Port
+ * @property string              $Path
+ * @property string              $Format
+ * @property ParameterCollection $GetParameter
+ * @property ParameterCollection $PostParameter
  */
 interface IRequestInput
 {
+    /**
+     * @return string
+     */
+    public function getUrl();
+
+    /**
+     * @return string
+     */
     public function getMethod();
 
+    /**
+     * @return string
+     */
     public function getProtocol();
 
+    /**
+     * @return string
+     */
     public function getSubdomains();
 
+    /**
+     * @return string
+     */
     public function getDomain();
 
+    /**
+     * @return string
+     */
     public function getPort();
 
+    /**
+     * @return string
+     */
     public function getPath();
 
+    /**
+     * @return string
+     */
     public function getFormat();
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getGetParameter();
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getPostParameter();
 }

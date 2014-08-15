@@ -2,7 +2,7 @@
 
 namespace Com\PaulDevelop\Library\Application;
 
-use \Com\PaulDevelop\Library\Common\Base;
+use Com\PaulDevelop\Library\Common\Base;
 use Negotiation\FormatNegotiator;
 
 /**
@@ -13,6 +13,7 @@ use Negotiation\FormatNegotiator;
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
  *
+ * @property string $Url
  * @property string $Method
  * @property string $Protocol
  * @property string $Subdomains
@@ -20,9 +21,12 @@ use Negotiation\FormatNegotiator;
  * @property string $Port
  * @property string $Path
  * @property string $Format
+ * @property ParameterCollection $GetParameter
+ * @property ParameterCollection $PostParameter
  */
 class RequestInput extends Base implements IRequestInput
 {
+    private $url;
     private $method;
     private $protocol;
     private $subdomains;
@@ -30,9 +34,12 @@ class RequestInput extends Base implements IRequestInput
     private $port;
     private $path;
     private $format;
+    private $getParameter;
+    private $postParameter;
 
     public function __construct($url = '')
     {
+        $this->url = $url;
         $this->method = '';
         $this->protocol = '';
         $this->subdomains = '';
@@ -40,6 +47,8 @@ class RequestInput extends Base implements IRequestInput
         $this->port = '';
         $this->path = '';
         $this->format = '';
+        $this->getParameter = new ParameterCollection();
+        $this->postParameter = new ParameterCollection();
 
         // method
         if (array_key_exists('REQUEST_METHOD', $_SERVER)) {
@@ -100,9 +109,25 @@ class RequestInput extends Base implements IRequestInput
             $this->port = $parts['port'];
         }
 
+        // path
         if (array_key_exists('path', $parts)) {
             $this->path = $parts['path'];
         }
+
+        // get parameter
+        foreach ($_GET as $key => $value) {
+            $this->getParameter->add(new Parameter($key, $value), $key);
+        }
+
+        // post parameter
+        foreach ($_POST as $key => $value) {
+            $this->postParameter->add(new Parameter($key, $value), $key);
+        }
+    }
+
+    public function getUrl()
+    {
+        return $this->url;
     }
 
     public function getMethod()
@@ -138,5 +163,15 @@ class RequestInput extends Base implements IRequestInput
     public function getFormat()
     {
         return $this->format;
+    }
+
+    public function getGetParameter()
+    {
+        return $this->getParameter;
+    }
+
+    public function getPostParameter()
+    {
+        return $this->postParameter;
     }
 }

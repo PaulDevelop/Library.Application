@@ -42,8 +42,8 @@ class RequestParser
         $strippedPath = ( !$supportParseParameter ) ? $originalPath : '';
         $pathParameter = new ParameterCollection();
         $systemParameter = new ParameterCollection();
-        $getParameter = new ParameterCollection();
-        $postParameter = new ParameterCollection();
+        //$getParameter = new ParameterCollection();
+        //$postParameter = new ParameterCollection();
 
         if ($supportParseParameter) {
             $chunks = preg_split('/\//', $requestInput->Path, -1, PREG_SPLIT_NO_EMPTY);
@@ -64,15 +64,17 @@ class RequestParser
             }
         }
 
-        foreach ($_GET as $key => $value) {
-            //$getParameter[$key] = $value;
-            $getParameter->add(new Parameter($key, $value), $key);
-        }
+        $getParameter = $requestInput->GetParameter;
+        $postParameter = $requestInput->PostParameter;
+        //foreach ($_GET as $key => $value) {
+        //    //$getParameter[$key] = $value;
+        //    $getParameter->add(new Parameter($key, $value), $key);
+        //}
 
-        foreach ($_POST as $key => $value) {
-            //$postParameter[$key] = $value;
-            $postParameter->add(new Parameter($key, $value), $key);
-        }
+        //foreach ($_POST as $key => $value) {
+        //    //$postParameter[$key] = $value;
+        //    $postParameter->add(new Parameter($key, $value), $key);
+        //}
 
         // TODO sanitize and validate
 

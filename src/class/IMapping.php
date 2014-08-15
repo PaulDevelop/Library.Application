@@ -12,8 +12,20 @@ namespace Com\PaulDevelop\Library\Application;
  */
 interface IMapping
 {
-
+    /**
+     * @return string
+     */
     public function getPattern();
 
+    /**
+     * @return bool
+     */
+    public function getSupportParseParameter();
+
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
     public function process(Request $request);
 }

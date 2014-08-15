@@ -13,7 +13,8 @@ use Com\PaulDevelop\Library\Common\ITemplate;
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
  * @property string $Pattern
- * @property array $Namespaces
+ * @property bool   $SupportParseParameter
+ * @property array  $Namespaces
  * @property string $SubNamespace
  * @property string $ControllerPath
  * @property string $TemplatePath
@@ -24,6 +25,11 @@ class FolderMapping extends Base implements IMapping
      * @var string
      */
     private $pattern;
+
+    /**
+     * @var bool
+     */
+    private $supportParseParameter;
 
     /**
      * @var array
@@ -47,6 +53,7 @@ class FolderMapping extends Base implements IMapping
 
     /**
      * @param string $pattern
+     * @param bool   $supportParseParameter
      * @param array  $namespaces
      * @param string $subNamespace
      * @param string $controllerPath
@@ -54,6 +61,7 @@ class FolderMapping extends Base implements IMapping
      */
     public function __construct(
         $pattern = '',
+        $supportParseParameter = false,
         $namespaces = array(),
         $subNamespace = '',
         $controllerPath = '',
@@ -86,7 +94,7 @@ class FolderMapping extends Base implements IMapping
             $url .= $request->Input->Subdomains.'.';
         }
         $url .= $request->Input->Domain;
-        if ( $request->Input->Port != '' ) {
+        if ($request->Input->Port != '') {
             $url .= ':'.$request->Input->Port;
         }
         if ($request->StrippedPath != '') {
@@ -185,7 +193,7 @@ class FolderMapping extends Base implements IMapping
         $controllerClassName .= 'Controller';
 
         $controller = null;
-        foreach ( $this->namespaces as $namespace ) {
+        foreach ($this->namespaces as $namespace) {
             $fullControllerClassName = $namespace.'\\'.$this->SubNamespace.'\\'.$controllerClassName;
             if (class_exists($fullControllerClassName)) {
                 $controller = new $fullControllerClassName();
@@ -193,7 +201,7 @@ class FolderMapping extends Base implements IMapping
             }
         }
 
-        if ( $controller == null ) {
+        if ($controller == null) {
             $controller = new DefaultTemplateController();
         }
 
@@ -213,6 +221,14 @@ class FolderMapping extends Base implements IMapping
     public function getPattern()
     {
         return $this->pattern;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSupportParseParameter()
+    {
+        return $this->supportParseParameter;
     }
 
     /**

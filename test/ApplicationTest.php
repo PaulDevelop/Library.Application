@@ -121,6 +121,21 @@ class MyRequestInputBackendFolder extends Base implements IRequestInput {
     {
         return 'text/html';
     }
+
+    public function getUrl()
+    {
+        return 'http://pauldevelop.com:81/backend/user/edit/id-1/';
+    }
+
+    public function getGetParameter()
+    {
+        return new ParameterCollection();
+    }
+
+    public function getPostParameter()
+    {
+        return new ParameterCollection();
+    }
 }
 
 class MyRequestInputBackendSubdomain extends Base implements IRequestInput {
@@ -158,9 +173,29 @@ class MyRequestInputBackendSubdomain extends Base implements IRequestInput {
     {
         return 'text/html';
     }
+
+    public function getUrl()
+    {
+        return 'http://backend.pauldevelop.com:81/user/edit/id-1/';
+    }
+
+    public function getGetParameter()
+    {
+        return new ParameterCollection();
+    }
+
+    public function getPostParameter()
+    {
+        return new ParameterCollection();
+    }
 }
 
 class MyRequestInputRegexPattern extends Base implements IRequestInput {
+    public function getUrl()
+    {
+        return 'http://pauldevelop.com:81/5r6n9a-Tiere-im-Urlaub/?foo=bar';
+    }
+
     public function getMethod()
     {
         return 'GET';
@@ -194,6 +229,18 @@ class MyRequestInputRegexPattern extends Base implements IRequestInput {
     public function getFormat()
     {
         return 'text/html';
+    }
+
+    public function getGetParameter()
+    {
+        $result = new ParameterCollection();
+        $result->add(new Parameter('foo', 'bar'), 'foo');
+        return $result;
+    }
+
+    public function getPostParameter()
+    {
+        return new ParameterCollection();
     }
 }
 
@@ -240,6 +287,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $mapper = new UrlToFileMapper();
         $mapper->mapFolder(
             '^pauldevelop\.com:81\/backend\/',
+            true,
             array('De\Welt\JobPortal'),
             'Controller\Backend',
             APP_FS_CONTROLLER.'',
@@ -277,6 +325,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $mapper = new UrlToFileMapper();
         $mapper->mapFolder(
             '^backend\.pauldevelop\.com:81\/*',
+            true,
             array('De\Welt\JobPortal'),
             'Controller\Backend',
             APP_FS_CONTROLLER.'',
@@ -303,11 +352,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $mapper = new UrlToFileMapper();
         $mapper->mapClass(
             '^pauldevelop\.com:81\/[a-z0-9]{6}.*?',
+            false,
             new MyRequestInputRegexPatternController()
         );
         $rp = new RequestParser(new Sanitizer(), new Validator());
         //$request = $rp->parse(new MyRequestInputBackendFolder());
-        $request = $rp->parse(new MyRequestInputRegexPattern(), false);
+        $request = $rp->parse(new MyRequestInputRegexPattern());
 //var_dump($request);die;
         $template = new MyTemplate();
 

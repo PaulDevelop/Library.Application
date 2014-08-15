@@ -11,16 +11,19 @@ use Com\PaulDevelop\Library\Common\Base;
  * @category Application
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
- * @property string $Pattern
+ * @property string      $Pattern
+ * @property bool        $SupportParseParameter
  * @property IController $Object
  */
 class ClassMapping extends Base implements IMapping
 {
     private $pattern;
+    private $supportParseParameter;
     private $object;
 
     public function __construct(
         $pattern = '',
+        $supportParseParameter = false,
         IController $object = null
     ) {
         $this->pattern = $pattern;
@@ -35,6 +38,11 @@ class ClassMapping extends Base implements IMapping
     public function getPattern()
     {
         return $this->pattern;
+    }
+
+    public function getSupportParseParameter()
+    {
+        return $this->supportParseParameter;
     }
 
     protected function getObject()

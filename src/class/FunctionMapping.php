@@ -11,16 +11,19 @@ use Com\PaulDevelop\Library\Common\Base;
  * @category Application
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
- * @property string $Pattern
+ * @property string   $Pattern
+ * @property bool     $SupportParseParameter
  * @property callable $Function
  */
 class FunctionMapping extends Base implements IMapping
 {
     private $pattern;
+    private $supportParseParameter;
     private $function;
 
     public function __construct(
         $pattern = '',
+        $supportParseParameter = false,
         callable $function = null
     ) {
         $this->pattern = $pattern;
@@ -39,6 +42,11 @@ class FunctionMapping extends Base implements IMapping
     public function getPattern()
     {
         return $this->pattern;
+    }
+
+    public function getSupportParseParameter()
+    {
+        return $this->supportParseParameter;
     }
 
     protected function getFunction()
