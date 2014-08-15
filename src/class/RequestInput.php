@@ -113,6 +113,7 @@ class RequestInput extends Base implements IRequestInput
         // path
         if (array_key_exists('path', $parts)) {
             $this->path = $parts['path'];
+            $this->path = (trim($this->path, "/"));
         }
 
         // get parameter
