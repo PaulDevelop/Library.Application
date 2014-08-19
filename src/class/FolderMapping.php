@@ -106,8 +106,13 @@ class FolderMapping extends Base implements IMapping
         //$pattern = str_replace('\\', '', $pattern);
         //$pattern = trim($pattern, "\t\n\r\0\x0B/");
 
+        // variables
+        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Domain), $pattern);
+
         preg_match('('.$pattern.')', $url, $matches);
+        var_dump($matches);
         $pattern = $matches[0];
+
 
         $path = str_replace($pattern, '', $url);
         $path = trim($path, "\t\n\r\0\x0B/");

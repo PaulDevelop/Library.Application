@@ -324,7 +324,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         //echo "SUBDOMAIN".PHP_EOL;
         $mapper = new UrlToFileMapper();
         $mapper->mapFolder(
-            '^backend\.pauldevelop\.com:81\/*',
+            //'^backend\.pauldevelop\.com:81\/*',
+            '^backend\.%baseUrl%:81\/*',
             true,
             array('De\Welt\JobPortal'),
             'Controller\Backend',

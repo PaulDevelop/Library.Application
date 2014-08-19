@@ -149,7 +149,10 @@ class UrlToFileMapper implements IUrlMapper
 
         $pattern = '/'.$pattern.'/';
 //        var_dump($pattern);
+        //var_dump($pattern);
 
+        // variables
+        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Domain), $pattern);
 
         // path
         //echo 'pattern  : '.$pattern.PHP_EOL;
