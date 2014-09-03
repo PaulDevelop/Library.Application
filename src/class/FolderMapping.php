@@ -107,16 +107,16 @@ class FolderMapping extends Base implements IMapping
         //$pattern = trim($pattern, "\t\n\r\0\x0B/");
 
         // variables
-        //$pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Domain), $pattern);
-        $pattern = str_replace(
-            '%baseUrl%',
-            str_replace(
-                '.',
-                '\.',
-                ($request->Input->Subdomains != '' ? $request->Input->Subdomains.'.' : '').$request->Input->Domain
-            ),
-            $pattern
-        );
+        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Domain), $pattern);
+        //$pattern = str_replace(
+        //    '%baseUrl%',
+        //    str_replace(
+        //        '.',
+        //        '\.',
+        //        ($request->Input->Subdomains != '' ? $request->Input->Subdomains.'.' : '').$request->Input->Domain
+        //    ),
+        //    $pattern
+        //);
 
         preg_match('('.$pattern.')', $url, $matches);
         //var_dump($matches);
