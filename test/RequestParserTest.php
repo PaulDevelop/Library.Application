@@ -77,7 +77,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
         //var_dump($request);
         */
 
-        $input = new RequestInput('some/path/id-1/');
+        $input = new RequestInput('http://pauldevelop.de/some/', 'http://demo.pauldevelop.de/some/path/id-1/');
         $rp = new RequestParser(new Sanitizer(), new Validator());
         $request = $rp->parse($input);
         //var_dump($request);
@@ -91,4 +91,15 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
         //RequestParser::parse('some/path', false, array());
     }
 
+    /**
+     * @test
+     */
+    public function testSubDomains() {
+        $input = new RequestInput('http://raufeldcontent.pauldevelop.de', 'http://backend.raufeldcontent.pauldevelop.de');
+        //$rp = new RequestParser(new Sanitizer(), new Validator());
+        //$request = $rp->parse($input);
+
+        //$this->assertEquals('backend', $request->Input->Subdomains);
+        $this->assertEquals('backend', $input->Subdomains);
+    }
 }

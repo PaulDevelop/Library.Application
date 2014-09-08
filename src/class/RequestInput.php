@@ -26,6 +26,7 @@ use Negotiation\FormatNegotiator;
  */
 class RequestInput extends Base implements IRequestInput
 {
+    private $baseUrl;
     private $url;
     private $method;
     private $protocol;
@@ -37,8 +38,9 @@ class RequestInput extends Base implements IRequestInput
     private $getParameter;
     private $postParameter;
 
-    public function __construct($url = '')
+    public function __construct($baseUrl = '', $url = '')
     {
+        $this->baseUrl = $baseUrl;
         $this->method = '';
         $this->protocol = '';
         $this->subdomains = '';
@@ -88,13 +90,30 @@ class RequestInput extends Base implements IRequestInput
             $this->protocol = $parts['scheme'];
         }
 
-        // subdomains
+//        // subdomains
+//        if (array_key_exists('host', $parts)) {
+//            $chunks = preg_split('/\./', $parts['host'], -1, PREG_SPLIT_NO_EMPTY);
+//            //var_dump($chunks);
+//            $this->subdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
+//            //var_dump($this->subdomains);
+//        }
+        // subdomains = baseUrl.Subdomains - url.Subdomains
         if (array_key_exists('host', $parts)) {
             $chunks = preg_split('/\./', $parts['host'], -1, PREG_SPLIT_NO_EMPTY);
-            //var_dump($chunks);
-            $this->subdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
+            $urlSubdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
+
+            $baseUrlParts = parse_url($baseUrl);
+            $chunks = preg_split('/\./', $baseUrlParts['host'], -1, PREG_SPLIT_NO_EMPTY);
+            $baseUrlSubdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
+
+//            var_dump($url, $urlSubdomains, $baseUrl, $baseUrlSubdomains);
+
+            $this->subdomains = substr($urlSubdomains, 0, strlen($urlSubdomains) - strlen($baseUrlSubdomains) - 1);
+            //var_dump($r);
+            //die;
             //var_dump($this->subdomains);
         }
+
 
         // host
         if (array_key_exists('host', $parts)) {
@@ -113,7 +132,7 @@ class RequestInput extends Base implements IRequestInput
         // path
         if (array_key_exists('path', $parts)) {
             $this->path = $parts['path'];
-            $this->path = (trim($this->path, "/"));
+            //$this->path = trim($this->path, '/');
         }
 
         // get parameter

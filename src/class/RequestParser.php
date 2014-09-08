@@ -37,8 +37,8 @@ class RequestParser
     //public function parse($path = '', $supportParseParameter = true)
     public function parse(IRequestInput $requestInput = null, $supportParseParameter = true)
     {
-        $originalPath = ($requestInput->Path != '' && $requestInput->Path[0] == '/') ? substr($requestInput->Path, 1)
-            : $requestInput->Path;
+        $originalPath =
+            ($requestInput->Path != '' && $requestInput->Path[0] == '/') ? substr($requestInput->Path, 1) : $requestInput->Path;
         $strippedPath = ( !$supportParseParameter ) ? $originalPath : '';
         $pathParameter = new ParameterCollection();
         $systemParameter = new ParameterCollection();
