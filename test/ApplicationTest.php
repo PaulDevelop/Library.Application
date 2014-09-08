@@ -127,6 +127,11 @@ class MyRequestInputBackendFolder extends Base implements IRequestInput {
         return 'http://pauldevelop.com:81/';
     }
 
+    public function getHost()
+    {
+        return 'pauldevelop.com';
+    }
+
     public function getUrl()
     {
         return 'http://pauldevelop.com:81/backend/user/edit/id-1/';
@@ -184,6 +189,11 @@ class MyRequestInputBackendSubdomain extends Base implements IRequestInput {
         return 'http://pauldevelop.com:81/';
     }
 
+    public function getHost()
+    {
+        return 'pauldevelop.com';
+    }
+
     public function getUrl()
     {
         return 'http://backend.pauldevelop.com:81/user/edit/id-1/';
@@ -204,6 +214,11 @@ class MyRequestInputRegexPattern extends Base implements IRequestInput {
     public function getBaseUrl()
     {
         return 'http://pauldevelop.com:81/';
+    }
+
+    public function getHost()
+    {
+        return 'pauldevelop.com';
     }
 
     public function getUrl()

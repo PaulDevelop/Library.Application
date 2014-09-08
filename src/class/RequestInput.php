@@ -13,6 +13,8 @@ use Negotiation\FormatNegotiator;
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
  *
+ * @property string $BaseUrl
+ * @property string $Host
  * @property string $Url
  * @property string $Method
  * @property string $Protocol
@@ -27,6 +29,7 @@ use Negotiation\FormatNegotiator;
 class RequestInput extends Base implements IRequestInput
 {
     private $baseUrl;
+    private $host;
     private $url;
     private $method;
     private $protocol;
@@ -41,6 +44,7 @@ class RequestInput extends Base implements IRequestInput
     public function __construct($baseUrl = '', $url = '')
     {
         $this->baseUrl = $baseUrl;
+        $this->host = '';
         $this->method = '';
         $this->protocol = '';
         $this->subdomains = '';
@@ -97,23 +101,30 @@ class RequestInput extends Base implements IRequestInput
 //            $this->subdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
 //            //var_dump($this->subdomains);
 //        }
-        // subdomains = baseUrl.Subdomains - url.Subdomains
+
+        // subdomains
         if (array_key_exists('host', $urlParts)) {
             $chunks = preg_split('/\./', $urlParts['host'], -1, PREG_SPLIT_NO_EMPTY);
             $urlSubdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
-            //var_dump($urlSubdomains);
 
             $baseUrlParts = parse_url($baseUrl);
             if ( array_key_exists('host', $baseUrlParts)) {
                 $chunks = preg_split('/\./', $baseUrlParts['host'], -1, PREG_SPLIT_NO_EMPTY);
                 $baseUrlSubdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
-                //var_dump($baseUrlSubdomains);
+
+                // subdomains = baseUrl.Subdomains - url.Subdomains
                 $this->subdomains = trim(substr($urlSubdomains, 0, strlen($urlSubdomains) - strlen($baseUrlSubdomains)), '.');
-                //echo "DIFF: ".$this->subdomains.PHP_EOL;
             }
         }
 
         // host
+        $baseUrlParts = parse_url($baseUrl);
+        if ( array_key_exists('host', $baseUrlParts) ) {
+            $this->host = $baseUrlParts['host'];
+            //echo "HOST: ".$this->host.PHP_EOL;
+        }
+
+        // domain
         if (array_key_exists('host', $urlParts)) {
             if ($this->subdomains == '') {
                 $this->domain = $urlParts['host'];
@@ -147,6 +158,11 @@ class RequestInput extends Base implements IRequestInput
     public function getBaseUrl()
     {
         return $this->baseUrl;
+    }
+
+    public function getHost()
+    {
+        return $this->host;
     }
 
     public function getUrl()

@@ -11,6 +11,7 @@ namespace Com\PaulDevelop\Library\Application;
  * @license  http://opensource.org/licenses/MIT MIT
  *
  * @property string              $BaseUrl
+ * @property string              $Host
  * @property string              $Url
  * @property string              $Method
  * @property string              $Protocol
@@ -28,6 +29,11 @@ interface IRequestInput
      * @return string
      */
     public function getBaseUrl();
+
+    /**
+     * @return string
+     */
+    public function getHost();
 
     /**
      * @return string
