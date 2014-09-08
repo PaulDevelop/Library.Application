@@ -82,12 +82,12 @@ class RequestInput extends Base implements IRequestInput
         }
         $this->url = $url;
 
-        $parts = parse_url($url);
+        $urlParts = parse_url($url);
         //var_dump($parts);
 
         // protocol
-        if (array_key_exists('scheme', $parts)) {
-            $this->protocol = $parts['scheme'];
+        if (array_key_exists('scheme', $urlParts)) {
+            $this->protocol = $urlParts['scheme'];
         }
 
 //        // subdomains
@@ -98,40 +98,35 @@ class RequestInput extends Base implements IRequestInput
 //            //var_dump($this->subdomains);
 //        }
         // subdomains = baseUrl.Subdomains - url.Subdomains
-        if (array_key_exists('host', $parts)) {
-            $chunks = preg_split('/\./', $parts['host'], -1, PREG_SPLIT_NO_EMPTY);
+        if (array_key_exists('host', $urlParts)) {
+            $chunks = preg_split('/\./', $urlParts['host'], -1, PREG_SPLIT_NO_EMPTY);
             $urlSubdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
 
             $baseUrlParts = parse_url($baseUrl);
-            $chunks = preg_split('/\./', $baseUrlParts['host'], -1, PREG_SPLIT_NO_EMPTY);
-            $baseUrlSubdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
-
-//            var_dump($url, $urlSubdomains, $baseUrl, $baseUrlSubdomains);
-
-            $this->subdomains = substr($urlSubdomains, 0, strlen($urlSubdomains) - strlen($baseUrlSubdomains) - 1);
-            //var_dump($r);
-            //die;
-            //var_dump($this->subdomains);
+            if ( array_key_exists('host', $baseUrlParts)) {
+                $chunks = preg_split('/\./', $baseUrlParts['host'], -1, PREG_SPLIT_NO_EMPTY);
+                $baseUrlSubdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
+                $this->subdomains = substr($urlSubdomains, 0, strlen($urlSubdomains) - strlen($baseUrlSubdomains) - 0);
+            }
         }
 
-
         // host
-        if (array_key_exists('host', $parts)) {
+        if (array_key_exists('host', $urlParts)) {
             if ($this->subdomains == '') {
-                $this->domain = $parts['host'];
+                $this->domain = $urlParts['host'];
             } else {
-                $this->domain = substr($parts['host'], strlen($this->subdomains) + 1);
+                $this->domain = substr($urlParts['host'], strlen($this->subdomains) + 1);
             }
         }
 
         // port
-        if (array_key_exists('port', $parts)) {
-            $this->port = $parts['port'];
+        if (array_key_exists('port', $urlParts)) {
+            $this->port = $urlParts['port'];
         }
 
         // path
-        if (array_key_exists('path', $parts)) {
-            $this->path = $parts['path'];
+        if (array_key_exists('path', $urlParts)) {
+            $this->path = $urlParts['path'];
             //$this->path = trim($this->path, '/');
         }
 
