@@ -93,7 +93,8 @@ class FolderMapping extends Base implements IMapping
         if ($request->Input->Subdomains != '') {
             $url .= $request->Input->Subdomains.'.';
         }
-        $url .= $request->Input->Domain;
+//        $url .= $request->Input->Domain;
+        $url .= $request->Input->Host;
         if ($request->Input->Port != '') {
             $url .= ':'.$request->Input->Port;
         }
@@ -107,7 +108,8 @@ class FolderMapping extends Base implements IMapping
         //$pattern = trim($pattern, "\t\n\r\0\x0B/");
 
         // variables
-        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Domain), $pattern);
+        //$pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Domain), $pattern);
+        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Host), $pattern);
         //$pattern = str_replace(
         //    '%baseUrl%',
         //    str_replace(

@@ -152,7 +152,8 @@ class UrlToFileMapper implements IUrlMapper
         //var_dump($pattern);
 
         // variables
-        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Domain), $pattern);
+        //$pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Domain), $pattern);
+        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Host), $pattern);
         //$pattern = str_replace(
         //    '%baseUrl%',
         //    str_replace(
@@ -173,7 +174,8 @@ class UrlToFileMapper implements IUrlMapper
         if ($request->Input->Subdomains != '') {
             $path .= $request->Input->Subdomains.'.';
         }
-        $path .= $request->Input->Domain;
+        //$path .= $request->Input->Domain;
+        $path .= $request->Input->Host;
         if ($request->Input->Port != '') {
             $path .= ':'.$request->Input->Port;
         }
