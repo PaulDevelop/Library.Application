@@ -10,6 +10,7 @@ namespace Com\PaulDevelop\Library\Application;
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
  *
+ * @property string              $BaseUrl
  * @property string              $Url
  * @property string              $Method
  * @property string              $Protocol
@@ -23,6 +24,11 @@ namespace Com\PaulDevelop\Library\Application;
  */
 interface IRequestInput
 {
+    /**
+     * @return string
+     */
+    public function getBaseUrl();
+
     /**
      * @return string
      */

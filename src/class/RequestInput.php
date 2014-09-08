@@ -146,6 +146,11 @@ class RequestInput extends Base implements IRequestInput
         }
     }
 
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
     public function getUrl()
     {
         return $this->url;
