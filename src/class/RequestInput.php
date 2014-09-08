@@ -101,12 +101,15 @@ class RequestInput extends Base implements IRequestInput
         if (array_key_exists('host', $urlParts)) {
             $chunks = preg_split('/\./', $urlParts['host'], -1, PREG_SPLIT_NO_EMPTY);
             $urlSubdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
+            //var_dump($urlSubdomains);
 
             $baseUrlParts = parse_url($baseUrl);
             if ( array_key_exists('host', $baseUrlParts)) {
                 $chunks = preg_split('/\./', $baseUrlParts['host'], -1, PREG_SPLIT_NO_EMPTY);
                 $baseUrlSubdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
-                $this->subdomains = substr($urlSubdomains, 0, strlen($urlSubdomains) - strlen($baseUrlSubdomains) - 0);
+                //var_dump($baseUrlSubdomains);
+                $this->subdomains = trim(substr($urlSubdomains, 0, strlen($urlSubdomains) - strlen($baseUrlSubdomains)), '.');
+                //echo "DIFF: ".$this->subdomains.PHP_EOL;
             }
         }
 

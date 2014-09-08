@@ -95,11 +95,10 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function testSubDomains() {
-        $input = new RequestInput('http://raufeldcontent.pauldevelop.de', 'http://backend.raufeldcontent.pauldevelop.de');
-        //$rp = new RequestParser(new Sanitizer(), new Validator());
-        //$request = $rp->parse($input);
-
-        //$this->assertEquals('backend', $request->Input->Subdomains);
+        $input = new RequestInput('http://raufeldcontent.pauldevelop.de/', 'http://backend.raufeldcontent.pauldevelop.de/');
         $this->assertEquals('backend', $input->Subdomains);
+
+        $input = new RequestInput('http://pauldevelop.de/', 'http://editor.pauldevelop.de/');
+        $this->assertEquals('editor', $input->Subdomains);
     }
 }
