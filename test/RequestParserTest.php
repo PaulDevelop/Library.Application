@@ -94,11 +94,34 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testSubDomains() {
-        $input = new RequestInput('http://raufeldcontent.pauldevelop.de/', 'http://backend.raufeldcontent.pauldevelop.de/');
+    public function testSubDomains()
+    {
+        $input = new RequestInput(
+            'http://raufeldcontent.pauldevelop.de/',
+            'http://backend.raufeldcontent.pauldevelop.de/'
+        );
         $this->assertEquals('backend', $input->Subdomains);
 
         $input = new RequestInput('http://pauldevelop.de/', 'http://editor.pauldevelop.de/');
         $this->assertEquals('editor', $input->Subdomains);
     }
+
+    /**
+     * @test
+     */
+    public function testParameterAccess()
+    {
+        $input = new RequestInput('http://pauldevelop.de/some/', 'http://demo.pauldevelop.de/some/path/id-1/foo-bar/');
+        $rp = new RequestParser(new Sanitizer(), new Validator());
+        $request = $rp->parse($input);
+
+        $this->assertEquals(true, $request->PathParameter->getBool('id', 0));
+        $this->assertEquals(1, $request->PathParameter->getInt('id', 0));
+        $this->assertEquals(10, $request->PathParameter->getInt('baz', 10));
+        $this->assertEquals('bar', $request->PathParameter->getString('foo', ''));
+    }
+
+    // http://voyage-left.codio.io:3000
+    // http://port-80.4y951ymaxcuzbyb9nqrrxuonopk138frq1mqu8ni7qjb57b9.box.codeanywhere.com
+    // http://port-80.4y951ymaxcuzbyb9nqrrxuonopk138frq1mqu8ni7qjb57b9.box.codeanywhere.com/customer-raufeld/com.sommerco.khd/src/public/web/s
 }
