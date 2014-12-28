@@ -203,7 +203,8 @@ class FolderMapping extends Base implements IMapping
             }
         );
         $controllerClassName .= implode($chunks);
-        if ($request->StrippedPath == '') {
+        //if ($request->StrippedPath == '') {
+        if ($path == '') {
             $controllerClassName .= 'Index';
         }
         $controllerClassName .= 'Controller';
