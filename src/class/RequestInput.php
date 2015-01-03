@@ -25,6 +25,7 @@ use Negotiation\FormatNegotiator;
  * @property string              $Format
  * @property ParameterCollection $GetParameter
  * @property ParameterCollection $PostParameter
+ * @property ParameterCollection $HeaderParameter
  */
 class RequestInput extends Base implements IRequestInput
 {
@@ -239,5 +240,10 @@ class RequestInput extends Base implements IRequestInput
     public function getPostParameter()
     {
         return $this->postParameter;
+    }
+
+    public function getHeaderParameter()
+    {
+        return $this->headerParameter;
     }
 }
