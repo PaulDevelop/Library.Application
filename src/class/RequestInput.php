@@ -13,16 +13,16 @@ use Negotiation\FormatNegotiator;
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
  *
- * @property string $BaseUrl
- * @property string $Host
- * @property string $Url
- * @property string $Method
- * @property string $Protocol
- * @property string $Subdomains
- * @property string $Domain
- * @property string $Port
- * @property string $Path
- * @property string $Format
+ * @property string              $BaseUrl
+ * @property string              $Host
+ * @property string              $Url
+ * @property string              $Method
+ * @property string              $Protocol
+ * @property string              $Subdomains
+ * @property string              $Domain
+ * @property string              $Port
+ * @property string              $Path
+ * @property string              $Format
  * @property ParameterCollection $GetParameter
  * @property ParameterCollection $PostParameter
  */
@@ -40,6 +40,7 @@ class RequestInput extends Base implements IRequestInput
     private $format;
     private $getParameter;
     private $postParameter;
+    private $headerParameter;
 
     public function __construct($baseUrl = '', $url = '')
     {
@@ -54,6 +55,7 @@ class RequestInput extends Base implements IRequestInput
         $this->format = '';
         $this->getParameter = new ParameterCollection();
         $this->postParameter = new ParameterCollection();
+        $this->headerParameter = new ParameterCollection();
 
         // method
         if (array_key_exists('REQUEST_METHOD', $_SERVER)) {
@@ -108,18 +110,19 @@ class RequestInput extends Base implements IRequestInput
             $urlSubdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
 
             $baseUrlParts = parse_url($baseUrl);
-            if ( array_key_exists('host', $baseUrlParts)) {
+            if (array_key_exists('host', $baseUrlParts)) {
                 $chunks = preg_split('/\./', $baseUrlParts['host'], -1, PREG_SPLIT_NO_EMPTY);
                 $baseUrlSubdomains = implode('.', array_slice($chunks, 0, count($chunks) - 2));
 
                 // subdomains = baseUrl.Subdomains - url.Subdomains
-                $this->subdomains = trim(substr($urlSubdomains, 0, strlen($urlSubdomains) - strlen($baseUrlSubdomains)), '.');
+                $this->subdomains =
+                    trim(substr($urlSubdomains, 0, strlen($urlSubdomains) - strlen($baseUrlSubdomains)), '.');
             }
         }
 
         // host
         $baseUrlParts = parse_url($baseUrl);
-        if ( array_key_exists('host', $baseUrlParts) ) {
+        if (array_key_exists('host', $baseUrlParts)) {
             $this->host = $baseUrlParts['host'];
             //echo "HOST: ".$this->host.PHP_EOL;
         }
@@ -153,6 +156,29 @@ class RequestInput extends Base implements IRequestInput
         foreach ($_POST as $key => $value) {
             $this->postParameter->add(new Parameter($key, $value), $key);
         }
+
+        // header parameter
+        $headers = array();
+        foreach ($_SERVER as $name => $value) {
+            if (substr($name, 0, 5) == 'HTTP_') {
+                $name = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))));
+                $headers[$name] = $value;
+            } else {
+                if ($name == "CONTENT_TYPE") {
+                    $headers["Content-Type"] = $value;
+                } else {
+                    if ($name == "CONTENT_LENGTH") {
+                        $headers["Content-Length"] = $value;
+                    }
+                }
+            }
+        }
+        foreach ($headers as $name => $value) {
+            $this->headerParameter->add(new Parameter($key, $value), $key);
+        }
+//        foreach (getallheaders() as $key => $value) {
+//            $this->headerParameter->add(new Parameter($key, $value), $key);
+//        }
     }
 
     public function getBaseUrl()
