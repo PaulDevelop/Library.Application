@@ -159,21 +159,21 @@ class RequestInput extends Base implements IRequestInput
 
         // header parameter
         $headers = array();
-        foreach ($_SERVER as $name => $value) {
-            if (substr($name, 0, 5) == 'HTTP_') {
-                $name = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))));
-                $headers[$name] = $value;
+        foreach ($_SERVER as $key => $value) {
+            if (substr($key, 0, 5) == 'HTTP_') {
+                $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5)))));
+                $headers[$key] = $value;
             } else {
-                if ($name == "CONTENT_TYPE") {
+                if ($key == "CONTENT_TYPE") {
                     $headers["Content-Type"] = $value;
                 } else {
-                    if ($name == "CONTENT_LENGTH") {
+                    if ($key == "CONTENT_LENGTH") {
                         $headers["Content-Length"] = $value;
                     }
                 }
             }
         }
-        foreach ($headers as $name => $value) {
+        foreach ($headers as $key => $value) {
             $this->headerParameter->add(new Parameter($key, $value), $key);
         }
 //        foreach (getallheaders() as $key => $value) {
