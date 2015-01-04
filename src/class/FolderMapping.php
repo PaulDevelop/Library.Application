@@ -162,6 +162,15 @@ class FolderMapping extends Base implements IMapping
             $templateFileName .= 'index';
         }
 
+        $methodPostfix = '';
+        switch ($request->Input->Format) {
+            case Formats::JSON:
+                $methodPostfix = '.'.strtolower($request->Input->Method);
+        }
+        $templateFileName .= $methodPostfix;
+        var_dump($methodPostfix);
+        var_dump($request->Input->Format);
+
         $templateFileName .= '.template.pdt';
         //if ( file_exists($templateFileName) ) {
         $template->TemplateFileName = $templateFileName;
@@ -207,6 +216,14 @@ class FolderMapping extends Base implements IMapping
         if ($path == '') {
             $controllerClassName .= 'Index';
         }
+
+        $methodPostfix = '';
+        switch ($request->Input->Format) {
+            case Formats::JSON:
+                $methodPostfix = '.'.$request->Input->Method;
+        }
+        $controllerClassName .= $methodPostfix;
+
         $controllerClassName .= 'Controller';
 
         $controller = null;

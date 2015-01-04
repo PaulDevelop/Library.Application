@@ -2,8 +2,8 @@
 
 namespace Com\PaulDevelop\Library\Application;
 
-define('APP_FS_CONTROLLER', 'path/to/controller/');
-define('APP_FS_TEMPLATE', 'path/to/templates/');
+//define('APP_FS_CONTROLLER', 'path/to/controller/');
+//define('APP_FS_TEMPLATE', 'path/to/templates/');
 
 /*
 class MyRequestHandler extends RequestHandler
