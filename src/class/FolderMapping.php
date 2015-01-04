@@ -157,17 +157,17 @@ class FolderMapping extends Base implements IMapping
         }
         $templateFileName .= $formatPrefix.'.';
 
+        $methodPrefix = '';
+        switch ($request->Input->Format) {
+            case Formats::JSON:
+                $methodPrefix = strtolower($request->Input->Method).'.';
+        }
+        $templateFileName .= $methodPrefix;
+
         $templateFileName .= str_replace('/', '.', $path);
         if ($path == '') {
             $templateFileName .= 'index';
         }
-
-        $methodPostfix = '';
-        switch ($request->Input->Format) {
-            case Formats::JSON:
-                $methodPostfix = '.'.strtolower($request->Input->Method);
-        }
-        $templateFileName .= $methodPostfix;
 
         $templateFileName .= '.template.pdt';
         //if ( file_exists($templateFileName) ) {
@@ -201,6 +201,13 @@ class FolderMapping extends Base implements IMapping
                 $controllerClassName .= 'Html';
         }
 
+        $methodPrefix = '';
+        switch ($request->Input->Format) {
+            case Formats::JSON:
+                $methodPrefix = ucfirst(strtolower($request->Input->Method));
+        }
+        $controllerClassName .= $methodPrefix;
+
         //$chunks = preg_split('/\//', $request->StrippedPath);
         $chunks = preg_split('/\//', $path);
         array_walk(
@@ -214,13 +221,6 @@ class FolderMapping extends Base implements IMapping
         if ($path == '') {
             $controllerClassName .= 'Index';
         }
-
-        $methodPostfix = '';
-        switch ($request->Input->Format) {
-            case Formats::JSON:
-                $methodPostfix = ucfirst(strtolower($request->Input->Method));
-        }
-        $controllerClassName .= $methodPostfix;
 
         $controllerClassName .= 'Controller';
 
