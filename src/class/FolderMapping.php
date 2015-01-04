@@ -168,8 +168,6 @@ class FolderMapping extends Base implements IMapping
                 $methodPostfix = '.'.strtolower($request->Input->Method);
         }
         $templateFileName .= $methodPostfix;
-        var_dump($methodPostfix);
-        var_dump($request->Input->Format);
 
         $templateFileName .= '.template.pdt';
         //if ( file_exists($templateFileName) ) {
