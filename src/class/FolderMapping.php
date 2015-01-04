@@ -218,7 +218,7 @@ class FolderMapping extends Base implements IMapping
         $methodPostfix = '';
         switch ($request->Input->Format) {
             case Formats::JSON:
-                $methodPostfix = '.'.$request->Input->Method;
+                $methodPostfix = ucfirst(strtolower($request->Input->Method));
         }
         $controllerClassName .= $methodPostfix;
 
