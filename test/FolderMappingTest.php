@@ -122,6 +122,6 @@ class FolderMappingTest extends \PHPUnit_Framework_TestCase
 
         $output = $mapper->process($request, $template);
 
-        $this->assertEquals('path/to/templates/backend/json.user.get.template.pdt', $template->TemplateFileName);
+        $this->assertEquals('path/to/templates/backend/json.get.user.template.pdt', $template->TemplateFileName);
     }
 }
