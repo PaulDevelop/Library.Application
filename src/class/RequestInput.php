@@ -25,6 +25,7 @@ use Negotiation\FormatNegotiator;
  * @property string              $Format
  * @property ParameterCollection $GetParameter
  * @property ParameterCollection $PostParameter
+ * @property ParameterCollection $PatchParameter
  * @property ParameterCollection $HeaderParameter
  */
 class RequestInput extends Base implements IRequestInput
