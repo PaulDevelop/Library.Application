@@ -58,6 +58,11 @@ class Request extends Base
     private $postParameter;
 
     /**
+     * @var ParameterCollection
+     */
+    private $patchParameter;
+
+    /**
      * @param IRequestInput       $input
      * @param string              $originalPath
      * @param string              $strippedPath
@@ -65,6 +70,7 @@ class Request extends Base
      * @param ParameterCollection $systemParameter
      * @param ParameterCollection $getParameter
      * @param ParameterCollection $postParameter
+     * @param ParameterCollection $patchParameter
      */
     public function __construct(
         IRequestInput $input = null,
@@ -73,7 +79,8 @@ class Request extends Base
         ParameterCollection $pathParameter = null,
         ParameterCollection $systemParameter = null,
         ParameterCollection $getParameter = null,
-        ParameterCollection $postParameter = null
+        ParameterCollection $postParameter = null,
+        ParameterCollection $patchParameter = null
     ) {
         $this->input = $input;
         $this->originalPath = $originalPath;
@@ -82,6 +89,7 @@ class Request extends Base
         $this->systemParameter = $systemParameter;
         $this->getParameter = $getParameter;
         $this->postParameter = $postParameter;
+        $this->patchParameter = $patchParameter;
     }
 
     //public function getStdClass() {
@@ -143,5 +151,13 @@ class Request extends Base
     protected function getPostParameter()
     {
         return $this->postParameter;
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    protected function getPatchParameter()
+    {
+        return $this->patchParameter;
     }
 }
