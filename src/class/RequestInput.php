@@ -41,6 +41,7 @@ class RequestInput extends Base implements IRequestInput
     private $format;
     private $getParameter;
     private $postParameter;
+    private $patchParameter;
     private $headerParameter;
 
     public function __construct($baseUrl = '', $url = '')
@@ -56,6 +57,7 @@ class RequestInput extends Base implements IRequestInput
         $this->format = '';
         $this->getParameter = new ParameterCollection();
         $this->postParameter = new ParameterCollection();
+        $this->patchParameter = new ParameterCollection();
         $this->headerParameter = new ParameterCollection();
 
         // method
@@ -161,7 +163,10 @@ class RequestInput extends Base implements IRequestInput
         }
 
         // patch parameter
-        //$data = file_get_contents('php://input');
+        // get parameter
+        foreach ($_GET as $key => $value) {
+            $this->patchParameter->add(new Parameter($key, $value), $key);
+        }
 
         // header parameter
         $headers = array();
@@ -245,6 +250,11 @@ class RequestInput extends Base implements IRequestInput
     public function getPostParameter()
     {
         return $this->postParameter;
+    }
+
+    public function getPatchParameter()
+    {
+        return $this->patchParameter;
     }
 
     public function getHeaderParameter()
