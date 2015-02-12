@@ -64,6 +64,8 @@ class RequestInput extends Base implements IRequestInput
                 $this->method = HttpVerbs::GET;
             } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
                 $this->method = HttpVerbs::PUT;
+            } elseif ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
+                $this->method = HttpVerbs::PUT;
             } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $this->method = HttpVerbs::POST;
             } elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
@@ -157,6 +159,9 @@ class RequestInput extends Base implements IRequestInput
         foreach ($_POST as $key => $value) {
             $this->postParameter->add(new Parameter($key, $value), $key);
         }
+
+        // patch parameter
+        //$data = file_get_contents('php://input');
 
         // header parameter
         $headers = array();

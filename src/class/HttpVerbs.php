@@ -16,4 +16,5 @@ class HttpVerbs
     const PUT = 'PUT';
     const POST = 'POST';
     const DELETE = 'DELETE';
+    const PATCH = 'PATCH';
 }
