@@ -70,6 +70,8 @@ class RequestParser
 
         $getParameter = $requestInput->GetParameter;
         $postParameter = $requestInput->PostParameter;
+        $patchParameter = $requestInput->PatchParameter;
+        $headerParameter = $requestInput->HeaderParameter;
         //foreach ($_GET as $key => $value) {
         //    //$getParameter[$key] = $value;
         //    $getParameter->add(new Parameter($key, $value), $key);
@@ -90,7 +92,9 @@ class RequestParser
             $pathParameter,
             $systemParameter,
             $getParameter,
-            $postParameter
+            $postParameter,
+            $patchParameter,
+            $headerParameter
         );
     }
     #endregion
