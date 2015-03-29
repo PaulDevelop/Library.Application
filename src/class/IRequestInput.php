@@ -22,6 +22,9 @@ namespace Com\PaulDevelop\Library\Application;
  * @property string              $Format
  * @property ParameterCollection $GetParameter
  * @property ParameterCollection $PostParameter
+ * @property ParameterCollection $PatchParameter
+ * @property ParameterCollection $HeaderParameter
+ * @property ParameterCollection $FileParameter
  */
 interface IRequestInput
 {
@@ -84,4 +87,19 @@ interface IRequestInput
      * @return ParameterCollection
      */
     public function getPostParameter();
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getPatchParameter();
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getHeaderParameter();
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getFileParameter();
 }
