@@ -27,6 +27,7 @@ use Negotiation\FormatNegotiator;
  * @property ParameterCollection $PostParameter
  * @property ParameterCollection $PatchParameter
  * @property ParameterCollection $HeaderParameter
+ * @property ParameterCollection $FileParameter
  */
 class RequestInput extends Base implements IRequestInput
 {
@@ -44,6 +45,7 @@ class RequestInput extends Base implements IRequestInput
     private $postParameter;
     private $patchParameter;
     private $headerParameter;
+    private $fileParameter;
 
     public function __construct($baseUrl = '', $url = '')
     {
@@ -60,6 +62,7 @@ class RequestInput extends Base implements IRequestInput
         $this->postParameter = new ParameterCollection();
         $this->patchParameter = new ParameterCollection();
         $this->headerParameter = new ParameterCollection();
+        $this->fileParameter = new ParameterCollection();
 
         // method
         if (array_key_exists('REQUEST_METHOD', $_SERVER)) {
@@ -164,10 +167,23 @@ class RequestInput extends Base implements IRequestInput
         }
 
         // patch parameter
-        // get parameter
-        foreach ($_GET as $key => $value) {
+        foreach ($_GET as $key => $value) { // POST?
             $this->patchParameter->add(new Parameter($key, $value), $key);
         }
+//        /* PUT data comes in on the stdin stream */
+//        $putdata = fopen("php://input", "r");
+//
+//        /* Open a file for writing */
+//        $fp = fopen("myputfile.ext", "w");
+//
+//        /* Read the data 1 KB at a time
+//           and write to the file */
+//        while ($data = fread($putdata, 1024))
+//            fwrite($fp, $data);
+//
+//        /* Close the streams */
+//        fclose($fp);
+//        fclose($putdata);
 
         // header parameter
         $headers = array();
@@ -191,6 +207,11 @@ class RequestInput extends Base implements IRequestInput
 //        foreach (getallheaders() as $key => $value) {
 //            $this->headerParameter->add(new Parameter($key, $value), $key);
 //        }
+
+        // file parameter
+        foreach ($_FILES as $key => $value) {
+            $this->fileParameter->add(new Parameter($key, $value['name']), $key);
+        }
     }
 
     public function getBaseUrl()
@@ -261,5 +282,10 @@ class RequestInput extends Base implements IRequestInput
     public function getHeaderParameter()
     {
         return $this->headerParameter;
+    }
+
+    public function getFileParameter()
+    {
+        return $this->fileParameter;
     }
 }

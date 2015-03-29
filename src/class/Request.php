@@ -19,6 +19,9 @@ use Com\PaulDevelop\Library\Common\Base;
  * @property ParameterCollection $PathParameter
  * @property ParameterCollection $GetParameter
  * @property ParameterCollection $PostParameter
+ * @property ParameterCollection $PatchParameter
+ * @property ParameterCollection $HeaderParameter
+ * @property ParameterCollection $FileParameter
  */
 class Request extends Base
 {
@@ -68,6 +71,11 @@ class Request extends Base
     private $headerParameter;
 
     /**
+     * @var ParameterCollection
+     */
+    private $fileParameter;
+
+    /**
      * @param IRequestInput       $input
      * @param string              $originalPath
      * @param string              $strippedPath
@@ -77,6 +85,7 @@ class Request extends Base
      * @param ParameterCollection $postParameter
      * @param ParameterCollection $patchParameter
      * @param ParameterCollection $headerParameter
+     * @param ParameterCollection $fileParameter
      */
     public function __construct(
         IRequestInput $input = null,
@@ -87,7 +96,8 @@ class Request extends Base
         ParameterCollection $getParameter = null,
         ParameterCollection $postParameter = null,
         ParameterCollection $patchParameter = null,
-        ParameterCollection $headerParameter = null
+        ParameterCollection $headerParameter = null,
+        ParameterCollection $fileParameter = null
     ) {
         $this->input = $input;
         $this->originalPath = $originalPath;
@@ -98,6 +108,7 @@ class Request extends Base
         $this->postParameter = $postParameter;
         $this->patchParameter = $patchParameter;
         $this->headerParameter = $headerParameter;
+        $this->fileParameter = $fileParameter;
     }
 
     //public function getStdClass() {
@@ -108,7 +119,8 @@ class Request extends Base
     /**
      * @return IRequestInput
      */
-    protected function getInput()
+    protected
+    function getInput()
     {
         return $this->input;
     }
@@ -116,7 +128,8 @@ class Request extends Base
     /**
      * @return string
      */
-    protected function getOriginalPath()
+    protected
+    function getOriginalPath()
     {
         return $this->originalPath;
     }
@@ -124,7 +137,8 @@ class Request extends Base
     /**
      * @return string
      */
-    protected function getStrippedPath()
+    protected
+    function getStrippedPath()
     {
         return $this->strippedPath;
     }
@@ -132,7 +146,8 @@ class Request extends Base
     /**
      * @return ParameterCollection
      */
-    protected function getPathParameter()
+    protected
+    function getPathParameter()
     {
         return $this->pathParameter;
     }
@@ -140,7 +155,8 @@ class Request extends Base
     /**
      * @return ParameterCollection
      */
-    protected function getSystemParameter()
+    protected
+    function getSystemParameter()
     {
         return $this->systemParameter;
     }
@@ -148,7 +164,8 @@ class Request extends Base
     /**
      * @return ParameterCollection
      */
-    protected function getGetParameter()
+    protected
+    function getGetParameter()
     {
         return $this->getParameter;
     }
@@ -156,7 +173,8 @@ class Request extends Base
     /**
      * @return ParameterCollection
      */
-    protected function getPostParameter()
+    protected
+    function getPostParameter()
     {
         return $this->postParameter;
     }
@@ -164,7 +182,8 @@ class Request extends Base
     /**
      * @return ParameterCollection
      */
-    protected function getPatchParameter()
+    protected
+    function getPatchParameter()
     {
         return $this->patchParameter;
     }
@@ -172,8 +191,18 @@ class Request extends Base
     /**
      * @return ParameterCollection
      */
-    protected function getHeaderParameter()
+    protected
+    function getHeaderParameter()
     {
         return $this->headerParameter;
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    protected
+    function getFileParameter()
+    {
+        return $this->fileParameter;
     }
 }
