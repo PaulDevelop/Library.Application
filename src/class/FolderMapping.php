@@ -173,6 +173,7 @@ class FolderMapping extends Base implements IMapping
         //if ( file_exists($templateFileName) ) {
         $template->TemplateFileName = $templateFileName;
         //}
+        $template->bindVariable('templateFileName', substr($templateFileName, strlen($this->templatePath)));
 
 
         // TODO: check, if template file exists
