@@ -19,17 +19,17 @@ class RequestParser
      * @var ISanitizer
      */
     private $sanitizer;
-    /**
-     * @var IValidator
-     */
-    private $validator;
+//    /**
+//     * @var IValidator
+//     */
+//    private $validator;
     #endregion
 
     #region constructor
-    public function __construct(ISanitizer $sanitizer = null, IValidator $validator = null)
+    public function __construct(ISanitizer $sanitizer = null) //, IValidator $validator = null)
     {
         $this->sanitizer = $sanitizer;
-        $this->validator = $validator;
+//        $this->validator = $validator;
     }
     #endregion
 

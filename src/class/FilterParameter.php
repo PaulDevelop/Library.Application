@@ -13,7 +13,7 @@ use Com\PaulDevelop\Library\Common\Base;
  * @license  http://opensource.org/licenses/MIT MIT
  * @property string               $Name
  * @property string               $Source
- * @property ConstraintCollection $constraints
+ * @property ConstraintCollection $ConstraintList
  */
 class FilterParameter extends Base
 {
@@ -30,21 +30,21 @@ class FilterParameter extends Base
     /**
      * @var ConstraintCollection
      */
-    private $constraints;
+    private $constraintList;
 
     /**
      * @param string               $name
      * @param string               $source
-     * @param ConstraintCollection $constraints
+     * @param ConstraintCollection $constraintList
      */
     public function __construct(
         $name = '',
         $source = '',
-        ConstraintCollection $constraints = null
+        ConstraintCollection $constraintList = null
     ) {
         $this->name = $name;
         $this->source = $source;
-        $this->constraints = $constraints;
+        $this->constraintList = $constraintList;
     }
 
     /**
@@ -66,8 +66,8 @@ class FilterParameter extends Base
     /**
      * @return string
      */
-    public function getConstraints()
+    public function getConstraintList()
     {
-        return $this->constraints;
+        return $this->constraintList;
     }
 }

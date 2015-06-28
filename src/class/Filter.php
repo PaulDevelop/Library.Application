@@ -12,7 +12,7 @@ use Com\PaulDevelop\Library\Common\Base;
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
  * @property string          $Path
- * @property FilterParameter $Parameter
+ * @property FilterParameter $ParameterList
  */
 class Filter extends Base
 {
@@ -24,18 +24,18 @@ class Filter extends Base
     /**
      * @var FilterParameterCollection
      */
-    private $parameters;
+    private $parameterList;
 
     /**
      * @param string                    $path
-     * @param FilterParameterCollection $parameters
+     * @param FilterParameterCollection $parameterList
      */
     public function __construct(
         $path = '',
-        FilterParameterCollection $parameters = null
+        FilterParameterCollection $parameterList = null
     ) {
         $this->path = $path;
-        $this->parameters = $parameters;
+        $this->parameterList = $parameterList;
     }
 
     /**
@@ -49,8 +49,8 @@ class Filter extends Base
     /**
      * @return FilterParameterCollection
      */
-    public function getParameters()
+    public function getParameterList()
     {
-        return $this->parameters;
+        return $this->parameterList;
     }
 }

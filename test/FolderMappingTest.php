@@ -120,6 +120,11 @@ class FolderMappingTemplate extends Base implements ITemplate
     {
         // TODO: Implement bindVariable() method.
     }
+
+    public function registerCallback($name = '', $object = null, $function = '')
+    {
+        // TODO: Implement registerCallback() method.
+    }
 }
 
 class FolderMappingTest extends \PHPUnit_Framework_TestCase

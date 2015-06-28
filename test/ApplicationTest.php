@@ -57,7 +57,8 @@ class MyRequestHandler extends RequestHandler
 use Com\PaulDevelop\Library\Common\Base;
 use Com\PaulDevelop\Library\Common\ITemplate;
 
-class MyTemplate extends Base implements ITemplate {
+class MyTemplate extends Base implements ITemplate
+{
     private $templateFileName = '';
 
     /**
@@ -84,9 +85,15 @@ class MyTemplate extends Base implements ITemplate {
     {
         // TODO: Implement bindVariable() method.
     }
+
+    public function registerCallback($name = '', $object = null, $function = '')
+    {
+        // TODO: Implement registerCallback() method.
+    }
 }
 
-class MyRequestInputBackendFolder extends Base implements IRequestInput {
+class MyRequestInputBackendFolder extends Base implements IRequestInput
+{
     public function getMethod()
     {
         return 'GET';
@@ -172,7 +179,8 @@ class MyRequestInputBackendFolder extends Base implements IRequestInput {
     }
 }
 
-class MyRequestInputBackendSubdomain extends Base implements IRequestInput {
+class MyRequestInputBackendSubdomain extends Base implements IRequestInput
+{
     public function getMethod()
     {
         return 'GET';
@@ -258,7 +266,8 @@ class MyRequestInputBackendSubdomain extends Base implements IRequestInput {
     }
 }
 
-class MyRequestInputRegexPattern extends Base implements IRequestInput {
+class MyRequestInputRegexPattern extends Base implements IRequestInput
+{
     public function getBaseUrl()
     {
         return 'http://pauldevelop.com:81/';
@@ -346,7 +355,8 @@ class MyRequestInputRegexPattern extends Base implements IRequestInput {
     }
 }
 
-class MyRequestInputRegexPatternController implements IController {
+class MyRequestInputRegexPatternController implements IController
+{
 
     /**
      * @param Request   $request
@@ -367,24 +377,24 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testMappingBackendFolder()
     {
-/*
-//        $baseObj = new BaseObject();
-//        $this->assertEquals('property value', $baseObj->Property);
-        $requestHandler = new RequestHandler();
+        /*
+        //        $baseObj = new BaseObject();
+        //        $this->assertEquals('property value', $baseObj->Property);
+                $requestHandler = new RequestHandler();
 
-        $application = new Application();
-        $application->registerRequestProcessedEvent(
-            $requestHandler,
-            'OnRequestHandled'
-        );
+                $application = new Application();
+                $application->registerRequestProcessedEvent(
+                    $requestHandler,
+                    'OnRequestHandled'
+                );
 
-        $parameter = array();
-        $application->processRequest(null, $parameter);
+                $parameter = array();
+                $application->processRequest(null, $parameter);
 
 
-        //$request = $application->Request;
-        //var_dump($request);
-*/
+                //$request = $application->Request;
+                //var_dump($request);
+        */
         //echo "FOLDER".PHP_EOL;
         $mapper = new UrlToFileMapper();
         $mapper->mapFolder(
@@ -426,7 +436,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         //echo "SUBDOMAIN".PHP_EOL;
         $mapper = new UrlToFileMapper();
         $mapper->mapFolder(
-            //'^backend\.pauldevelop\.com:81\/*',
+        //'^backend\.pauldevelop\.com:81\/*',
             '^backend\.%baseUrl%:81\/*',
             true,
             array('De\Welt\JobPortal'),

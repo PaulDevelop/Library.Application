@@ -14,14 +14,21 @@ interface IValidator
 {
     public function addFilter();
 
+//    /**
+//     * @param string              $path
+//     * @param string              $source
+//     * @param ParameterCollection $actualParameterList
+//     *
+//     * @return bool
+//     * @internal param ParameterCollection $actualParameter
+//     *
+//     */
+//    public function check($path = '', $source = '', ParameterCollection $actualParameterList = null);
+
     /**
-     * @param string              $path
-     * @param string              $source
-     * @param ParameterCollection $actualParameterList
+     * @param Request $request
      *
-     * @return bool
-     * @internal param ParameterCollection $actualParameter
-     *
+     * @return mixed
      */
-    public function check($path = '', $source = '', ParameterCollection $actualParameterList = null);
+    public function process(Request $request = null);
 }
