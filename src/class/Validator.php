@@ -12,8 +12,39 @@ namespace Com\PaulDevelop\Library\Application;
  */
 class Validator implements IValidator
 {
-    public function check($actualParameter = array(), $desiredParameter = array())
+    // region member
+    /** @var FilterCollection */
+    private $filter;
+    // endregion
+
+    // region constructor
+    public function __construct()
     {
+        $this->filter = new FilterCollection();
+    }
+    // endregion
+
+    // region methods
+    public function addFilter(Filter $filter = null)
+    {
+        $this->filter->add($filter, $filter->Path);
+    }
+
+    //public function check($actualParameter = array(), $desiredParameter = array())
+    public function check($path = '', ParameterCollection $actualParameter = null)
+    {
+        var_dump($path);
+        var_dump($this->filter[$path]);
+        var_dump($this->filter);
+
+//        if ($this->filter[$path] != null) {
+        /** @var Filter $filter */
+        if (($filter = $this->filter[$path]) != null) {
+            foreach ( $filter->Parameter as $parameter ) {}
+        }
+
+        die;
+
         // white list
 
         // data type
@@ -25,4 +56,5 @@ class Validator implements IValidator
         //INPUT_ GET, POST, PATH, SERVER, SESSION, (Request), COOKIE, ENV
         // bin/updateParameter => own tool, installed by composer?
     }
+    // endregion
 }

@@ -11,8 +11,8 @@ use Com\PaulDevelop\Library\Common\Base;
  * @category Application
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
- * @property string          $Name
- * @property FilterParameter $parameter
+ * @property string          $Path
+ * @property FilterParameter $Parameter
  */
 class Filter extends Base
 {

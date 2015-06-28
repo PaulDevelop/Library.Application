@@ -124,23 +124,4 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
     // http://voyage-left.codio.io:3000
     // http://port-80.4y951ymaxcuzbyb9nqrrxuonopk138frq1mqu8ni7qjb57b9.box.codeanywhere.com
     // http://port-80.4y951ymaxcuzbyb9nqrrxuonopk138frq1mqu8ni7qjb57b9.box.codeanywhere.com/customer-raufeld/com.sommerco.khd/src/public/web/s
-
-    /**
-     * @test
-     */
-    public function testRequestValidator()
-    {
-        $input = new RequestInput('http://pauldevelop.de/some/', 'http://demo.pauldevelop.de/some/path/id-1/');
-        $rp = new RequestParser(new Sanitizer(), new Validator();
-        $request = $rp->parse($input);
-        var_dump($request);
-//
-//        $this->assertEquals('some/path/id-1/', $request->OriginalPath);
-//        $this->assertEquals('some/path', $request->StrippedPath);
-//        $pc = new ParameterCollection();
-//        $pc->add(new Parameter('id', 1), 'id');
-//        $this->assertEquals($pc, $request->PathParameter);
-
-        //RequestParser::parse('some/path', false, array());
-    }
 }

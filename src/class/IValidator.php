@@ -12,5 +12,13 @@ namespace Com\PaulDevelop\Library\Application;
  */
 interface IValidator
 {
-    public function check();
+    public function addFilter();
+
+    /**
+     * @param string              $path
+     * @param ParameterCollection $actualParameter
+     *
+     * @return bool
+     */
+    public function check($path = '', ParameterCollection $actualParameter = null);
 }
