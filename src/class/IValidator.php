@@ -16,9 +16,12 @@ interface IValidator
 
     /**
      * @param string              $path
-     * @param ParameterCollection $actualParameter
+     * @param string              $source
+     * @param ParameterCollection $actualParameterList
      *
      * @return bool
+     * @internal param ParameterCollection $actualParameter
+     *
      */
-    public function check($path = '', ParameterCollection $actualParameter = null);
+    public function check($path = '', $source = '', ParameterCollection $actualParameterList = null);
 }

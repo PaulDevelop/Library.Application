@@ -14,9 +14,9 @@ use Com\PaulDevelop\Library\Common\GenericCollection;
  */
 class ParameterCollection extends GenericCollection
 {
-    public function __construct()
+    public function __construct($initialValues = array(), $keyFieldName = '')
     {
-        parent::__construct('Com\PaulDevelop\Library\Application\Parameter');
+        parent::__construct('Com\PaulDevelop\Library\Application\Parameter', $initialValues, $keyFieldName);
     }
 
     /**

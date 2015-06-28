@@ -31,7 +31,7 @@ class Validator implements IValidator
     }
 
     //public function check($actualParameter = array(), $desiredParameter = array())
-    public function check($path = '', ParameterCollection $actualParameter = null)
+    public function check($path = '', $source = '', ParameterCollection $actualParameterList = null)
     {
         var_dump($path);
         var_dump($this->filter[$path]);
@@ -40,9 +40,20 @@ class Validator implements IValidator
 //        if ($this->filter[$path] != null) {
         /** @var Filter $filter */
         if (($filter = $this->filter[$path]) != null) {
-            foreach ( $filter->Parameter as $parameter ) {}
-        }
+            /** @var FilterParameter $parameter */
+            foreach ($filter->Parameter as $parameter) {
+                // check, if correct source
+                if ($parameter->Source != $source) {
+                    continue;
+                }
 
+                // check, if demanded parameter is in actual parameter list
+                if ($actualParameterList[$parameter->Name] != null) {
+                    // check constraints
+
+                }
+            }
+        }
         die;
 
         // white list
