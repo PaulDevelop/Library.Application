@@ -144,6 +144,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         // find constraint violations
         $constraintViolationList = $validator->process($request);
+//        var_dump($constraintViolationList);
+//        var_dump($constraintViolationList->getStdClass());
         if (count($constraintViolationList) > 0) {
             /** @var ConstraintViolation $constraintViolation */
             foreach ($constraintViolationList as $constraintViolation) {
@@ -163,7 +165,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                     new Parameter('fromEventId', 'abc'),
                     new Constraint('type', 'xsd:int', 'Value is not an integer.', '')
                 )
-            )
+            ),
+            'parameterName'
         );
         $this->assertEquals($expectedConstraintViolationList, $constraintViolationList);
     }

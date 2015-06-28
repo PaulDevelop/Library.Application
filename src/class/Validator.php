@@ -147,7 +147,7 @@ class Validator implements IValidator
     public function process(Request $request = null)
     {
         // init
-        $result = array(); //new ConstraintViolationCollection();
+        $constraintViolationList = array(); //new ConstraintViolationCollection();
 
         // action
         /** @var Filter $filter */
@@ -157,59 +157,58 @@ class Validator implements IValidator
                 // get
                 if ($demandedParameter->Source == 'get') {
                     if (($actualParameter = $request->Input->GetParameter[$demandedParameter->Name]) != null) {
-                        $result = array_merge(
-                            $result,
-                            $this->checkConstraints($actualParameter, $demandedParameter)->getIterator()->getArrayCopy()
-                        );
+                        $constraintViolationList += $this->checkConstraints($actualParameter, $demandedParameter)
+                            ->getIterator()
+                            ->getArrayCopy();
                     }
                 } elseif ($demandedParameter->Source == 'post') {
                     if (($actualParameter = $request->Input->PostParameter[$demandedParameter->Name]) != null) {
-                        $result = array_merge(
-                            $result,
-                            $this->checkConstraints($actualParameter, $demandedParameter)->getIterator()->getArrayCopy()
-                        );
+                        $constraintViolationList += $this->checkConstraints($actualParameter, $demandedParameter)
+                            ->getIterator()
+                            ->getArrayCopy();
                     }
                 } elseif ($demandedParameter->Source == 'patch') {
                     if (($actualParameter = $request->Input->PatchParameter[$demandedParameter->Name]) != null) {
-                        $result = array_merge(
-                            $result,
-                            $this->checkConstraints($actualParameter, $demandedParameter)->getIterator()->getArrayCopy()
-                        );
+                        $constraintViolationList += $this->checkConstraints($actualParameter, $demandedParameter)
+                            ->getIterator()
+                            ->getArrayCopy();
                     }
                 } elseif ($demandedParameter->Source == 'header') {
                     if (($actualParameter = $request->Input->HeaderParameter[$demandedParameter->Name]) != null) {
-                        $result = array_merge(
-                            $result,
-                            $this->checkConstraints($actualParameter, $demandedParameter)->getIterator()->getArrayCopy()
-                        );
+                        $constraintViolationList += $this->checkConstraints($actualParameter, $demandedParameter)
+                            ->getIterator()
+                            ->getArrayCopy();
                     }
                 } elseif ($demandedParameter->Source == 'file') {
                     if (($actualParameter = $request->Input->FileParameter[$demandedParameter->Name]) != null) {
-                        $result = array_merge(
-                            $result,
-                            $this->checkConstraints($actualParameter, $demandedParameter)->getIterator()->getArrayCopy()
-                        );
+                        $constraintViolationList += $this->checkConstraints($actualParameter, $demandedParameter)
+                            ->getIterator()
+                            ->getArrayCopy();
                     }
                 } elseif ($demandedParameter->Source == 'path') {
                     if (($actualParameter = $request->PathParameter[$demandedParameter->Name]) != null) {
-                        $result = array_merge(
-                            $result,
-                            $this->checkConstraints($actualParameter, $demandedParameter)->getIterator()->getArrayCopy()
-                        );
+                        $constraintViolationList += $this->checkConstraints($actualParameter, $demandedParameter)
+                            ->getIterator()
+                            ->getArrayCopy();
                     }
                 } elseif ($demandedParameter->Source == 'system') {
                     if (($actualParameter = $request->SystemParameter[$demandedParameter->Name]) != null) {
-                        $result = array_merge(
-                            $result,
-                            $this->checkConstraints($actualParameter, $demandedParameter)->getIterator()->getArrayCopy()
-                        );
+                        $constraintViolationList += $this->checkConstraints($actualParameter, $demandedParameter)
+                            ->getIterator()
+                            ->getArrayCopy();
                     }
                 }
             }
         }
 
         // return
-        return new ConstraintViolationCollection($result);
+        $result = new ConstraintViolationCollection();
+//        return new ConstraintViolationCollection($result);
+        /** @var ConstraintViolation $constraintViolation */
+        foreach ($constraintViolationList as $parameterName => $constraintViolation) {
+            $result->add($constraintViolation, $parameterName);
+        }
+        return $result;
     }
 
     /**
@@ -267,6 +266,12 @@ class Validator implements IValidator
             // value=""
             // errorText="" errorTextKey=""/>
         }
+
+//        echo "1111111".PHP_EOL;
+//        var_dump($result);
+//        echo "2222222".PHP_EOL;
+//        var_dump($result->getIterator()->getArrayCopy());
+//        die;
 
         // return
         return $result;

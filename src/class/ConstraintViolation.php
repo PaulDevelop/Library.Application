@@ -11,6 +11,7 @@ use Com\PaulDevelop\Library\Common\Base;
  * @category Application
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
+ * @property string     $parameterName
  * @property Parameter  $ActualParameter
  * @property Constraint $Constraint
  */
@@ -58,6 +59,14 @@ class ConstraintViolation extends Base
     // endregion
 
     // region properties
+    /**
+     * @return string
+     */
+    public function getParameterName()
+    {
+        return $this->actualParameter->Name;
+    }
+
     /**
      * @return Parameter
      */
