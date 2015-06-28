@@ -146,6 +146,30 @@ class MyRequestInputBackendFolder extends Base implements IRequestInput {
     {
         return new ParameterCollection();
     }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getPatchParameter()
+    {
+        // TODO: Implement getPatchParameter() method.
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getHeaderParameter()
+    {
+        // TODO: Implement getHeaderParameter() method.
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getFileParameter()
+    {
+        // TODO: Implement getFileParameter() method.
+    }
 }
 
 class MyRequestInputBackendSubdomain extends Base implements IRequestInput {
@@ -207,6 +231,30 @@ class MyRequestInputBackendSubdomain extends Base implements IRequestInput {
     public function getPostParameter()
     {
         return new ParameterCollection();
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getPatchParameter()
+    {
+        // TODO: Implement getPatchParameter() method.
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getHeaderParameter()
+    {
+        // TODO: Implement getHeaderParameter() method.
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getFileParameter()
+    {
+        // TODO: Implement getFileParameter() method.
     }
 }
 
@@ -271,6 +319,30 @@ class MyRequestInputRegexPattern extends Base implements IRequestInput {
     public function getPostParameter()
     {
         return new ParameterCollection();
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getPatchParameter()
+    {
+        // TODO: Implement getPatchParameter() method.
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getHeaderParameter()
+    {
+        // TODO: Implement getHeaderParameter() method.
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getFileParameter()
+    {
+        // TODO: Implement getFileParameter() method.
     }
 }
 

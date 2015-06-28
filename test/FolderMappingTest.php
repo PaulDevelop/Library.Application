@@ -66,6 +66,30 @@ class FolderMappingFormatJsonRequest extends Base implements IRequestInput
     {
         return new ParameterCollection();
     }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getPatchParameter()
+    {
+        // TODO: Implement getPatchParameter() method.
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getHeaderParameter()
+    {
+        // TODO: Implement getHeaderParameter() method.
+    }
+
+    /**
+     * @return ParameterCollection
+     */
+    public function getFileParameter()
+    {
+        // TODO: Implement getFileParameter() method.
+    }
 }
 
 class FolderMappingTemplate extends Base implements ITemplate
@@ -122,6 +146,6 @@ class FolderMappingTest extends \PHPUnit_Framework_TestCase
 
         $output = $mapper->process($request, $template);
 
-        $this->assertEquals('path/to/templates/backend/json.get.user.template.pdt', $template->TemplateFileName);
+        $this->assertEquals('path/to/templates/backend/json.user.get.template.pdt', $template->TemplateFileName);
     }
 }

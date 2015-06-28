@@ -5,10 +5,10 @@
     </filter>
     <testsuites>
         <testsuite name="Library.Application">
-            <!--
             <directory suffix=".php">.</directory>
-            -->
+            <!--
             <file>ApplicationTest.php</file>
+            -->
         </testsuite>
     </testsuites>
 </phpunit>

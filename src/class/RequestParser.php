@@ -68,6 +68,8 @@ class RequestParser
             }
         }
 
+//        $this->validator->check($strippedPath, $requestInput->GetParameter);
+
         $getParameter = $requestInput->GetParameter;
         $postParameter = $requestInput->PostParameter;
         $patchParameter = $requestInput->PatchParameter;
