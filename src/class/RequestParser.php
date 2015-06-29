@@ -19,17 +19,17 @@ class RequestParser
      * @var ISanitizer
      */
     private $sanitizer;
-//    /**
-//     * @var IValidator
-//     */
-//    private $validator;
+    /**
+     * @var IValidator
+     */
+    private $validator;
     #endregion
 
     #region constructor
-    public function __construct(ISanitizer $sanitizer = null) //, IValidator $validator = null)
+    public function __construct(ISanitizer $sanitizer = null, IValidator $validator = null)
     {
         $this->sanitizer = $sanitizer;
-//        $this->validator = $validator;
+        $this->validator = $validator;
     }
     #endregion
 
@@ -85,10 +85,7 @@ class RequestParser
         //    $postParameter->add(new Parameter($key, $value), $key);
         //}
 
-        // TODO sanitize and validate
-
-        // return
-        return new Request(
+        $request = new Request(
             $requestInput,
             $originalPath,
             $strippedPath,
@@ -100,6 +97,26 @@ class RequestParser
             $headerParameter,
             $fileParameter
         );
+
+        // TODO sanitize and validate
+//        $request->ConstraintViolationList = $this->validator->process($request);
+
+        $result = new Request(
+            $request->Input,
+            $request->OriginalPath,
+            $request->StrippedPath,
+            $request->PathParameter,
+            $request->SystemParameter,
+            $request->GetParameter,
+            $request->PostParameter,
+            $request->PatchParameter,
+            $request->HeaderParameter,
+            $request->FileParameter,
+            $this->validator->process($request)
+        );
+
+        // return
+        return $result;
     }
     #endregion
 }

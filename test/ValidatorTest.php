@@ -139,13 +139,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         // mock input and request object
         $input = new MyRequestInputValidation();
-        $requestParser = new RequestParser(new Sanitizer());//, $validator);
+        $requestParser = new RequestParser(new Sanitizer(), $validator);
         $request = $requestParser->parse($input);
 
         // find constraint violations
-        $constraintViolationList = $validator->process($request);
-//        var_dump($constraintViolationList);
-//        var_dump($constraintViolationList->getStdClass());
+        $constraintViolationList = $request->ConstraintViolationList;
         if (count($constraintViolationList) > 0) {
             /** @var ConstraintViolation $constraintViolation */
             foreach ($constraintViolationList as $constraintViolation) {
