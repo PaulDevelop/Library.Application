@@ -27,7 +27,8 @@ class Validator implements IValidator
     // region methods
     public function addFilter(Filter $filter = null)
     {
-        $this->filter->add($filter, $filter->Path);
+//        $this->filter->add($filter, $filter->Path);
+        $this->filter->add($filter, $filter->Pattern);
     }
 
     //public function check($actualParameter = array(), $desiredParameter = array())
@@ -149,9 +150,24 @@ class Validator implements IValidator
         // init
         $constraintViolationList = array(); //new ConstraintViolationCollection();
 
+        //$request->Input->
+
         // action
+
+
+//        var_dump($this->filter);
+//        die;
+
         /** @var Filter $filter */
-        if (($filter = $this->filter[$request->StrippedPath]) != null) {
+        if (($filter = $this->findFilter($request)) != null) {
+//            var_dump($filter);
+//        }
+//
+//        die;
+//
+//
+//        /** @var Filter $filter */
+//        if (($filter = $this->filter[$request->StrippedPath]) != null) {
             /** @var FilterParameter $demandedParameter */
             foreach ($filter->ParameterList as $demandedParameter) {
                 // get
@@ -211,6 +227,51 @@ class Validator implements IValidator
         return $result;
     }
 
+    private function findFilter(Request $request = null)
+    {
+        // init
+        $result = null;
+
+        // action
+        $url = '';
+        if ($request->Input->Subdomains != '') {
+            $url .= $request->Input->Subdomains.'.';
+        }
+
+        $url .= $request->Input->Host;
+        if ($request->Input->Port != '') {
+            $url .= ':'.$request->Input->Port;
+        }
+        if ($request->StrippedPath != '') {
+            $url .= '/'.$request->StrippedPath;
+        }
+        $url = trim($url, "\t\n\r\0\x0B/");
+
+
+        foreach ($this->filter as $filter) {
+            $pattern = $filter->Pattern;
+
+            // variables
+            $pattern = str_replace('%baseHost%', str_replace('.', '\.', $request->Input->Host), $pattern);
+
+            echo $pattern.' ~// '.$url.PHP_EOL;
+
+            $hit = preg_match('/('.$pattern.')/', $url, $matches);
+
+            var_dump($hit);
+            var_dump($matches);
+
+            if ($hit) {
+                $result = $filter;
+                break;
+            }
+        }
+
+        // return
+        return $result;
+    }
+
+
     /**
      * @param Parameter       $actualParameter
      * @param FilterParameter $demandedParameter
@@ -223,6 +284,16 @@ class Validator implements IValidator
         $result = new ConstraintViolationCollection();
 
         // check constraints
+
+
+//        /** @var Constraint $constraint */
+//        foreach ($demandedParameter->ConstraintList as $demandedParameter) {
+//            $tmp = $this->checkPattern('%baseHost%/profile', $request->);
+//            var_dump($tmp);
+//            die;
+//        }
+
+
         /** @var Constraint $constraint */
         if (($constraint = $demandedParameter->ConstraintList['type']) != null) {
             //var_dump($constraint);
@@ -276,5 +347,47 @@ class Validator implements IValidator
         // return
         return $result;
     }
+
+//    /**
+//     * @param string  $pattern
+//     * @param bool    $supportParseParameter
+//     * @param Request $request
+//     *
+//     * @return int
+//     */
+//    private function checkPattern($pattern = '', $supportParseParameter = false, Request $request = null)
+//    {
+//        $pattern = '/'.$pattern.'/';
+//        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Host), $pattern);
+//
+//        // path
+//        $path = '';
+//        if ($request->Input->Subdomains != '') {
+//            $path .= $request->Input->Subdomains.'.';
+//        }
+//        $path .= $request->Input->Host;
+//        if ($request->Input->Port != '') {
+//            $path .= ':'.$request->Input->Port;
+//        }
+//
+//        if ($supportParseParameter == true) {
+//            if ($request->StrippedPath != '') {
+//                $path .= '/'.$request->StrippedPath;
+//            }
+//        } else {
+//            if ($request->Input->Path != '') {
+//                $path .= '/'.$request->Input->Path;
+//            }
+//        }
+//
+//        $path = trim($path, "\t\n\r\0\x0B/");
+//
+//        // match
+//        $result = preg_match($pattern, $path);
+//
+//        // return
+//        return $result;
+//    }
+
     // endregion
 }

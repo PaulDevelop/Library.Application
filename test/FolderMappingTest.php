@@ -144,8 +144,9 @@ class FolderMappingTest extends \PHPUnit_Framework_TestCase
             APP_FS_TEMPLATE.'backend'
         );
 
-        $rp = new RequestParser(new Sanitizer(), new Validator());
-        $request = $rp->parse(new FolderMappingFormatJsonRequest());
+//        $rp = new RequestParser(new Sanitizer(), new Validator());
+//        $request = $rp->parse(new FolderMappingFormatJsonRequest());
+        $request = RequestParser::parse(new FolderMappingFormatJsonRequest());
 
         $template = new FolderMappingTemplate();
 

@@ -12,18 +12,18 @@ use Com\PaulDevelop\Library\Common\Base;
  * @author   Rüdiger Scheumann <code@pauldevelop.com>
  * @license  http://opensource.org/licenses/MIT MIT
  *
- * @property RequestInput                  $Input
- * @property string                        $OriginalPath
- * @property string                        $StrippedPath
- * @property ParameterCollection           $SystemParameter
- * @property ParameterCollection           $PathParameter
- * @property ParameterCollection           $GetParameter
- * @property ParameterCollection           $PostParameter
- * @property ParameterCollection           $PatchParameter
- * @property ParameterCollection           $HeaderParameter
- * @property ParameterCollection           $FileParameter
- * @property ConstraintViolationCollection $ConstraintViolationList
+ * @property RequestInput        $Input
+ * @property string              $OriginalPath
+ * @property string              $StrippedPath
+ * @property ParameterCollection $SystemParameter
+ * @property ParameterCollection $PathParameter
+ * @property ParameterCollection $GetParameter
+ * @property ParameterCollection $PostParameter
+ * @property ParameterCollection $PatchParameter
+ * @property ParameterCollection $HeaderParameter
+ * @property ParameterCollection $FileParameter
  */
+//  * @property ConstraintViolationCollection $ConstraintViolationList
 class Request extends Base
 {
     /**
@@ -76,24 +76,24 @@ class Request extends Base
      */
     private $fileParameter;
 
-    /**
-     * @var ConstraintViolationCollection
-     */
-    private $constraintViolationList;
+//    /**
+//     * @var ConstraintViolationCollection
+//     */
+//    private $constraintViolationList;
 
     /**
-     * @param IRequestInput                 $input
-     * @param string                        $originalPath
-     * @param string                        $strippedPath
-     * @param ParameterCollection           $pathParameter
-     * @param ParameterCollection           $systemParameter
-     * @param ParameterCollection           $getParameter
-     * @param ParameterCollection           $postParameter
-     * @param ParameterCollection           $patchParameter
-     * @param ParameterCollection           $headerParameter
-     * @param ParameterCollection           $fileParameter
-     * @param ConstraintViolationCollection $constraintViolationList
+     * @param IRequestInput       $input
+     * @param string              $originalPath
+     * @param string              $strippedPath
+     * @param ParameterCollection $pathParameter
+     * @param ParameterCollection $systemParameter
+     * @param ParameterCollection $getParameter
+     * @param ParameterCollection $postParameter
+     * @param ParameterCollection $patchParameter
+     * @param ParameterCollection $headerParameter
+     * @param ParameterCollection $fileParameter
      */
+    // * @param ConstraintViolationCollection $constraintViolationList
     public function __construct(
         IRequestInput $input = null,
         $originalPath = '',
@@ -104,9 +104,9 @@ class Request extends Base
         ParameterCollection $postParameter = null,
         ParameterCollection $patchParameter = null,
         ParameterCollection $headerParameter = null,
-        ParameterCollection $fileParameter = null,
-        ConstraintViolationCollection $constraintViolationList = null
+        ParameterCollection $fileParameter = null
     ) {
+//        ConstraintViolationCollection $constraintViolationList = null
         $this->input = $input;
         $this->originalPath = $originalPath;
         $this->strippedPath = $strippedPath;
@@ -117,7 +117,7 @@ class Request extends Base
         $this->patchParameter = $patchParameter;
         $this->headerParameter = $headerParameter;
         $this->fileParameter = $fileParameter;
-        $this->constraintViolationList = $constraintViolationList;
+//        $this->constraintViolationList = $constraintViolationList;
     }
 
     /**
@@ -200,11 +200,11 @@ class Request extends Base
         return $this->fileParameter;
     }
 
-    /**
-     * @return ConstraintViolationCollection
-     */
-    protected function getConstraintViolationList()
-    {
-        return $this->constraintViolationList;
-    }
+//    /**
+//     * @return ConstraintViolationCollection
+//     */
+//    protected function getConstraintViolationList()
+//    {
+//        return $this->constraintViolationList;
+//    }
 }

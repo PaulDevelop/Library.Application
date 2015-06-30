@@ -78,8 +78,9 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
         */
 
         $input = new RequestInput('http://pauldevelop.de/some/', 'http://demo.pauldevelop.de/some/path/id-1/');
-        $rp = new RequestParser(new Sanitizer(), new Validator());
-        $request = $rp->parse($input);
+//        $rp = new RequestParser(new Sanitizer(), new Validator());
+//        $request = $rp->parse($input);
+        $request = RequestParser::parse($input);
         //var_dump($request);
 
         $this->assertEquals('some/path/id-1/', $request->OriginalPath);
@@ -112,8 +113,9 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
     public function testParameterAccess()
     {
         $input = new RequestInput('http://pauldevelop.de/some/', 'http://demo.pauldevelop.de/some/path/id-1/foo-bar/');
-        $rp = new RequestParser(new Sanitizer(), new Validator());
-        $request = $rp->parse($input);
+//        $rp = new RequestParser(new Sanitizer(), new Validator());
+//        $request = $rp->parse($input);
+        $request = RequestParser::parse($input);
 
         $this->assertEquals(true, $request->PathParameter->getBool('id', 0));
         $this->assertEquals(1, $request->PathParameter->getInt('id', 0));

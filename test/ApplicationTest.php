@@ -414,8 +414,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         //$ri = new MyRequestInput();
         //var_dump($ri->Path);die;
 
-        $rp = new RequestParser(new Sanitizer(), new Validator());
-        $request = $rp->parse(new MyRequestInputBackendFolder());
+//        $rp = new RequestParser(new Sanitizer(), new Validator());
+//        $request = $rp->parse(new MyRequestInputBackendFolder());
+        $request = RequestParser::parse(new MyRequestInputBackendFolder());
 
         $template = new MyTemplate();
 
@@ -444,9 +445,10 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             APP_FS_CONTROLLER.'',
             APP_FS_TEMPLATE.'backend'
         );
-        $rp = new RequestParser(new Sanitizer(), new Validator());
-        //$request = $rp->parse(new MyRequestInputBackendFolder());
-        $request = $rp->parse(new MyRequestInputBackendSubdomain());
+//        $rp = new RequestParser(new Sanitizer(), new Validator());
+//        //$request = $rp->parse(new MyRequestInputBackendFolder());
+//        $request = $rp->parse(new MyRequestInputBackendSubdomain());
+        $request = RequestParser::parse(new MyRequestInputBackendSubdomain());
 
         $template = new MyTemplate();
 
@@ -468,9 +470,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             false,
             new MyRequestInputRegexPatternController()
         );
-        $rp = new RequestParser(new Sanitizer(), new Validator());
-        //$request = $rp->parse(new MyRequestInputBackendFolder());
-        $request = $rp->parse(new MyRequestInputRegexPattern());
+//        $rp = new RequestParser(new Sanitizer(), new Validator());
+//        //$request = $rp->parse(new MyRequestInputBackendFolder());
+//        $request = $rp->parse(new MyRequestInputRegexPattern());
+
+        $request = RequestParser::parse(new MyRequestInputRegexPattern());
+
 //var_dump($request);die;
         $template = new MyTemplate();
 

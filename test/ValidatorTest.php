@@ -18,7 +18,7 @@ class MyRequestInputValidation extends Base implements IRequestInput
 
     public function getSubdomains()
     {
-        return '';
+        return 'shop';
     }
 
     public function getDomain()
@@ -43,7 +43,7 @@ class MyRequestInputValidation extends Base implements IRequestInput
 
     public function getBaseUrl()
     {
-        return 'http://pauldevelop.de/';
+        return 'http://shop.pauldevelop.de/';
     }
 
     public function getHost()
@@ -53,7 +53,7 @@ class MyRequestInputValidation extends Base implements IRequestInput
 
     public function getUrl()
     {
-        return 'http://pauldevelop.de/search/?fromEventId=1';
+        return 'http://shop.pauldevelop.de/search/?fromEventId=1';
     }
 
     public function getGetParameter()
@@ -102,6 +102,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $validator->addFilter(
             new Filter(
                 'search',
+                '^shop.%baseHost%\/search',
+                true,
                 new FilterParameterCollection(
                     array(
                         new FilterParameter(
@@ -139,11 +141,15 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         // mock input and request object
         $input = new MyRequestInputValidation();
-        $requestParser = new RequestParser(new Sanitizer(), $validator);
-        $request = $requestParser->parse($input);
+//        $requestParser = new RequestParser(new Sanitizer(), $validator);
+//        $request = $requestParser->parse($input);
+        $request = RequestParser::parse($input);
+
+//        $request = $sanitizer->process($request);
+        $constraintViolationList = $validator->process($request);
 
         // find constraint violations
-        $constraintViolationList = $request->ConstraintViolationList;
+//        $constraintViolationList = $request->ConstraintViolationList;
         if (count($constraintViolationList) > 0) {
             /** @var ConstraintViolation $constraintViolation */
             foreach ($constraintViolationList as $constraintViolation) {

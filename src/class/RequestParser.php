@@ -15,27 +15,27 @@ namespace Com\PaulDevelop\Library\Application;
 class RequestParser
 {
     #region member
-    /**
-     * @var ISanitizer
-     */
-    private $sanitizer;
-    /**
-     * @var IValidator
-     */
-    private $validator;
+//    /**
+//     * @var ISanitizer
+//     */
+//    private $sanitizer;
+//    /**
+//     * @var IValidator
+//     */
+//    private $validator;
     #endregion
 
     #region constructor
-    public function __construct(ISanitizer $sanitizer = null, IValidator $validator = null)
-    {
-        $this->sanitizer = $sanitizer;
-        $this->validator = $validator;
-    }
+//    public function __construct(ISanitizer $sanitizer = null, IValidator $validator = null)
+//    {
+//        $this->sanitizer = $sanitizer;
+//        $this->validator = $validator;
+//    }
     #endregion
 
     #region methods
     //public function parse($path = '', $supportParseParameter = true)
-    public function parse(IRequestInput $requestInput = null, $supportParseParameter = true)
+    public static function parse(IRequestInput $requestInput = null, $supportParseParameter = true)
     {
         $originalPath =
             ($requestInput->Path != '' && $requestInput->Path[0] == '/')
@@ -101,22 +101,22 @@ class RequestParser
         // TODO sanitize and validate
 //        $request->ConstraintViolationList = $this->validator->process($request);
 
-        $result = new Request(
-            $request->Input,
-            $request->OriginalPath,
-            $request->StrippedPath,
-            $request->PathParameter,
-            $request->SystemParameter,
-            $request->GetParameter,
-            $request->PostParameter,
-            $request->PatchParameter,
-            $request->HeaderParameter,
-            $request->FileParameter,
-            $this->validator->process($request)
-        );
+//        $result = new Request(
+//            $request->Input,
+//            $request->OriginalPath,
+//            $request->StrippedPath,
+//            $request->PathParameter,
+//            $request->SystemParameter,
+//            $request->GetParameter,
+//            $request->PostParameter,
+//            $request->PatchParameter,
+//            $request->HeaderParameter,
+//            $request->FileParameter,
+//            $this->validator->process($request)
+//        );
 
         // return
-        return $result;
+        return $request;
     }
     #endregion
 }
