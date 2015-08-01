@@ -128,7 +128,7 @@ class FolderMapping extends Base implements IMapping
 
         // create default controller, if no controller was found
         if ($controller == null) {
-            $controller = new DefaultTemplateController();
+            $controller = new DefaultTemplateController($this);
         }
 
         /** @var IController $controller */
