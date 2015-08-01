@@ -82,13 +82,73 @@ class FolderMapping extends Base implements IMapping
      */
     public function process(Request $request = null, ITemplate $template = null)
     {
+        // path = url - pattern
+        $url = $this->getCleanUrl($request);
+        $pattern = $this->processPattern($request, $url);
+        $path = str_replace($pattern, '', $url);
+        $path = trim($path, "\t\n\r\0\x0B/");
+
+        // set base url
+        $template->bindVariable('base', $request->Input->Protocol.'://'.$pattern.'/');
+
         // get template file name
-        $templateFileName = $this->templatePath;
-        if (substr($templateFileName, -1, 1) != DIRECTORY_SEPARATOR) {
-            $templateFileName .= DIRECTORY_SEPARATOR;
+        $templateFileName = $this->getTemplateFileName($request, $path);
+
+        // set template file name
+        //if ( file_exists($templateFileName) ) {
+        $template->TemplateFileName = $templateFileName;
+        //}
+        $template->bindVariable('templateFileName', substr($templateFileName, strlen($this->templatePath)));
+
+
+        // TODO: check, if template file exists
+        // TODO: 404 (if template and / or controller file does not exist)
+
+        // get controller class name
+        $controllerClassName = $this->getControllerClassName($request, $path);
+
+        // try to find and create controller in namespaces
+        $controller = null;
+        foreach ($this->namespaces as $namespace) {
+            $fullControllerClassName = $namespace.'\\'.$this->SubNamespace.'\\'.$controllerClassName;
+            if (class_exists($fullControllerClassName)) {
+                $controller = new $fullControllerClassName();
+                break;
+            }
         }
 
-        // path = url - pattern
+        // create default controller, if no controller was found
+        if ($controller == null) {
+            $controller = new DefaultTemplateController();
+        }
+
+        /** @var IController $controller */
+        return $controller->process($request, $template);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPattern()
+    {
+        return $this->pattern;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSupportParseParameter()
+    {
+        return $this->supportParseParameter;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function getCleanUrl(Request $request)
+    {
         $url = '';
         if ($request->Input->Subdomains != '') {
             $url .= $request->Input->Subdomains.'.';
@@ -102,6 +162,17 @@ class FolderMapping extends Base implements IMapping
             $url .= '/'.$request->StrippedPath;
         }
         $url = trim($url, "\t\n\r\0\x0B/");
+        return $url;
+    }
+
+    /**
+     * @param Request $request
+     * @param         $url
+     *
+     * @return mixed|string
+     */
+    public function processPattern(Request $request, $url)
+    {
         $pattern = $this->Pattern;
         //$pattern = str_replace('*', '', $pattern);
         //$pattern = str_replace('\\', '', $pattern);
@@ -120,15 +191,25 @@ class FolderMapping extends Base implements IMapping
         //    $pattern
         //);
 
+        $matches = array();
         preg_match('('.$pattern.')', $url, $matches);
         //var_dump($matches);
         $pattern = $matches[0];
+        return $pattern;
+    }
 
-
-        $path = str_replace($pattern, '', $url);
-        $path = trim($path, "\t\n\r\0\x0B/");
-
-        $template->bindVariable('base', $request->Input->Protocol.'://'.$pattern.'/');
+    /**
+     * @param Request $request
+     * @param         $path
+     *
+     * @return string
+     */
+    public function getTemplateFileName(Request $request, $path)
+    {
+        $templateFileName = $this->templatePath;
+        if (substr($templateFileName, -1, 1) != DIRECTORY_SEPARATOR) {
+            $templateFileName .= DIRECTORY_SEPARATOR;
+        }
 
         //echo 'XXX';
         //var_dump($path);
@@ -170,16 +251,17 @@ class FolderMapping extends Base implements IMapping
         $templateFileName .= $methodPrefix;
 
         $templateFileName .= '.template.pdt';
-        //if ( file_exists($templateFileName) ) {
-        $template->TemplateFileName = $templateFileName;
-        //}
-        $template->bindVariable('templateFileName', substr($templateFileName, strlen($this->templatePath)));
+        return $templateFileName;
+    }
 
-
-        // TODO: check, if template file exists
-        // TODO: 404 (if template and / or controller file does not exist)
-
-        // get controller class name
+    /**
+     * @param Request $request
+     * @param         $path
+     *
+     * @return string
+     */
+    public function getControllerClassName(Request $request, $path)
+    {
         //$controllerClassName = $this->namespace;
         //if (substr($controllerClassName, -1, 1) != '\\') {
         //    $controllerClassName .= '\\';
@@ -224,44 +306,7 @@ class FolderMapping extends Base implements IMapping
         $controllerClassName .= $methodPrefix;
 
         $controllerClassName .= 'Controller';
-
-        $controller = null;
-        foreach ($this->namespaces as $namespace) {
-            $fullControllerClassName = $namespace.'\\'.$this->SubNamespace.'\\'.$controllerClassName;
-            if (class_exists($fullControllerClassName)) {
-                $controller = new $fullControllerClassName();
-                break;
-            }
-        }
-
-        if ($controller == null) {
-            $controller = new DefaultTemplateController();
-        }
-
-        //if (class_exists($controllerClassName)) {
-        //    $controller = new $controllerClassName();
-        //} else {
-        //    $controller = new DefaultTemplateController();
-        //}
-
-        /** @var IController $controller */
-        return $controller->process($request, $template);
-    }
-
-    /**
-     * @return string
-     */
-    public function getPattern()
-    {
-        return $this->pattern;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getSupportParseParameter()
-    {
-        return $this->supportParseParameter;
+        return $controllerClassName;
     }
 
     /**
