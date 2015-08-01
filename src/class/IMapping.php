@@ -2,6 +2,8 @@
 
 namespace Com\PaulDevelop\Library\Application;
 
+use Com\PaulDevelop\Library\Common\ITemplate;
+
 /**
  * IMapping
  *
@@ -23,9 +25,10 @@ interface IMapping
     public function getSupportParseParameter();
 
     /**
-     * @param Request $request
+     * @param Request   $request
+     * @param ITemplate $template
      *
      * @return string
      */
-    public function process(Request $request);
+    public function process(Request $request, ITemplate $template);
 }
