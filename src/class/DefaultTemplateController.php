@@ -18,6 +18,13 @@ use Com\PaulDevelop\Library\Common\ITemplate;
  */
 class DefaultTemplateController implements IController
 {
+    // region constructor
+    public function __construct(IMapping $mapping = null)
+    {
+    }
+    // endregion
+
+    // region methods
     /**
      * @param Request   $request
      * @param ITemplate $template
@@ -28,4 +35,5 @@ class DefaultTemplateController implements IController
     {
         return $template->process();
     }
+    // endregion
 }
