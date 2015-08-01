@@ -89,7 +89,7 @@ class FolderMapping extends Base implements IMapping
     {
         // get path
         $url = $this->getCleanUrl($request);
-        $pattern = $this->processPattern($request, $url);
+        $pattern = $this->processPattern($request, $this->Pattern, $url);
         $path = $this->getPath($pattern, $url);
 
         // set base url
@@ -160,20 +160,21 @@ class FolderMapping extends Base implements IMapping
 
     /**
      * @param Request $request
+     * @param         $pattern
      * @param         $url
      *
      * @return mixed|string
      */
-    public function processPattern(Request $request, $url)
+    public static function processPattern(Request $request, $pattern, $url)
     {
-        $pattern = $this->Pattern;
+        $result = $pattern;
         //$pattern = str_replace('*', '', $pattern);
         //$pattern = str_replace('\\', '', $pattern);
         //$pattern = trim($pattern, "\t\n\r\0\x0B/");
 
         // variables
         //$pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Domain), $pattern);
-        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Host), $pattern);
+        $result = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Host), $result);
         //$pattern = str_replace(
         //    '%baseUrl%',
         //    str_replace(
@@ -185,10 +186,10 @@ class FolderMapping extends Base implements IMapping
         //);
 
         $matches = array();
-        preg_match('('.$pattern.')', $url, $matches);
+        preg_match('('.$result.')', $url, $matches);
         //var_dump($matches);
-        $pattern = $matches[0];
-        return $pattern;
+        $result = $matches[0];
+        return $result;
     }
 
     /**
@@ -197,7 +198,7 @@ class FolderMapping extends Base implements IMapping
      *
      * @return string
      */
-    public function getTemplateFileName(Request $request, $path)
+    public static function getTemplateFileName(Request $request, $path)
     {
 //        $templateFileName = $this->templatePath;
 //        if (substr($templateFileName, -1, 1) != DIRECTORY_SEPARATOR) {
