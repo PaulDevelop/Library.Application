@@ -21,6 +21,7 @@ use Com\PaulDevelop\Library\Common\ITemplate;
  */
 class FolderMapping extends Base implements IMapping
 {
+    // region member
     /**
      * @var string
      */
@@ -50,7 +51,9 @@ class FolderMapping extends Base implements IMapping
      * @var string
      */
     private $templatePath;
+    // endregion
 
+    // region constructor
     /**
      * @param string $pattern
      * @param bool   $supportParseParameter
@@ -73,7 +76,9 @@ class FolderMapping extends Base implements IMapping
         $this->controllerPath = $controllerPath;
         $this->templatePath = $templatePath;
     }
+    // endregion
 
+    // region methods
     /**
      * @param Request   $request
      * @param ITemplate $template
@@ -82,23 +87,27 @@ class FolderMapping extends Base implements IMapping
      */
     public function process(Request $request = null, ITemplate $template = null)
     {
-        // path = url - pattern
+        // get path
         $url = $this->getCleanUrl($request);
         $pattern = $this->processPattern($request, $url);
-        $path = str_replace($pattern, '', $url);
-        $path = trim($path, "\t\n\r\0\x0B/");
+        $path = $this->getPath($pattern, $url);
 
         // set base url
         $template->bindVariable('base', $request->Input->Protocol.'://'.$pattern.'/');
 
         // get template file name
         $templateFileName = $this->getTemplateFileName($request, $path);
+        $fullTemplateFileName = $this->templatePath;
+        if (substr($fullTemplateFileName, -1, 1) != DIRECTORY_SEPARATOR) {
+            $fullTemplateFileName .= DIRECTORY_SEPARATOR;
+        }
+        $fullTemplateFileName .= $templateFileName;
 
         // set template file name
         //if ( file_exists($templateFileName) ) {
-        $template->TemplateFileName = $templateFileName;
+        $template->TemplateFileName = $fullTemplateFileName;
         //}
-        $template->bindVariable('templateFileName', substr($templateFileName, strlen($this->templatePath)));
+        $template->bindVariable('templateFileName', substr($fullTemplateFileName, strlen($this->templatePath)));
 
 
         // TODO: check, if template file exists
@@ -127,27 +136,11 @@ class FolderMapping extends Base implements IMapping
     }
 
     /**
-     * @return string
-     */
-    public function getPattern()
-    {
-        return $this->pattern;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getSupportParseParameter()
-    {
-        return $this->supportParseParameter;
-    }
-
-    /**
      * @param Request $request
      *
      * @return string
      */
-    public function getCleanUrl(Request $request)
+    public static function getCleanUrl(Request $request)
     {
         $url = '';
         if ($request->Input->Subdomains != '') {
@@ -206,11 +199,12 @@ class FolderMapping extends Base implements IMapping
      */
     public function getTemplateFileName(Request $request, $path)
     {
-        $templateFileName = $this->templatePath;
-        if (substr($templateFileName, -1, 1) != DIRECTORY_SEPARATOR) {
-            $templateFileName .= DIRECTORY_SEPARATOR;
-        }
+//        $templateFileName = $this->templatePath;
+//        if (substr($templateFileName, -1, 1) != DIRECTORY_SEPARATOR) {
+//            $templateFileName .= DIRECTORY_SEPARATOR;
+//        }
 
+        $templateFileName = '';
         //echo 'XXX';
         //var_dump($path);
 
@@ -260,7 +254,7 @@ class FolderMapping extends Base implements IMapping
      *
      * @return string
      */
-    public function getControllerClassName(Request $request, $path)
+    public static function getControllerClassName(Request $request, $path)
     {
         //$controllerClassName = $this->namespace;
         //if (substr($controllerClassName, -1, 1) != '\\') {
@@ -310,6 +304,38 @@ class FolderMapping extends Base implements IMapping
     }
 
     /**
+     * @param $pattern
+     * @param $url
+     *
+     * @return mixed|string
+     */
+    public static function getPath($pattern, $url)
+    {
+        // path = url - pattern
+        $path = str_replace($pattern, '', $url);
+        $path = trim($path, "\t\n\r\0\x0B/");
+        return $path;
+    }
+    // endregion
+
+    // region properties
+    /**
+     * @return string
+     */
+    public function getPattern()
+    {
+        return $this->pattern;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSupportParseParameter()
+    {
+        return $this->supportParseParameter;
+    }
+
+    /**
      * @return array
      */
     protected function getNamespaces()
@@ -340,4 +366,5 @@ class FolderMapping extends Base implements IMapping
     {
         return $this->templatePath;
     }
+    // endregion
 }
