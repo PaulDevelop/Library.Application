@@ -28,7 +28,9 @@ class ClassMapping extends Base implements IMapping
         IController $object = null
     ) {
         $this->pattern = $pattern;
-        $this->object = $object;
+//        $this->object = $object;
+        $className = get_class($object);
+        $this->object = new $className($this);
     }
 
     public function process(Request $request = null, ITemplate $template = null)

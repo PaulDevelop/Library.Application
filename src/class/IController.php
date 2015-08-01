@@ -2,7 +2,7 @@
 
 namespace Com\PaulDevelop\Library\Application;
 
-use \Com\PaulDevelop\Library\Common\ITemplate;
+use Com\PaulDevelop\Library\Common\ITemplate;
 
 /**
  * IController
@@ -14,6 +14,14 @@ use \Com\PaulDevelop\Library\Common\ITemplate;
  */
 interface IController
 {
+    // region constructor
+    /**
+     * @param IMapping $mapping
+     */
+    public function __construct(IMapping $mapping);
+    // endregion
+
+    // region methods
     /**
      * @param Request   $request
      * @param ITemplate $template
@@ -21,4 +29,5 @@ interface IController
      * @return string
      */
     public function process(Request $request = null, ITemplate $template = null);
+    // endregion
 }

@@ -121,7 +121,7 @@ class FolderMapping extends Base implements IMapping
         foreach ($this->namespaces as $namespace) {
             $fullControllerClassName = $namespace.'\\'.$this->SubNamespace.'\\'.$controllerClassName;
             if (class_exists($fullControllerClassName)) {
-                $controller = new $fullControllerClassName();
+                $controller = new $fullControllerClassName($this);
                 break;
             }
         }

@@ -14,6 +14,17 @@ use Com\PaulDevelop\Library\Common\ITemplate;
  */
 interface IMapping
 {
+    // region methods
+    /**
+     * @param Request   $request
+     * @param ITemplate $template
+     *
+     * @return string
+     */
+    public function process(Request $request, ITemplate $template);
+    // endregion
+
+    // region properties
     /**
      * @return string
      */
@@ -23,12 +34,5 @@ interface IMapping
      * @return bool
      */
     public function getSupportParseParameter();
-
-    /**
-     * @param Request   $request
-     * @param ITemplate $template
-     *
-     * @return string
-     */
-    public function process(Request $request, ITemplate $template);
+    // endregion
 }

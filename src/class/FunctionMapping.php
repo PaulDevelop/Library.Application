@@ -3,6 +3,7 @@
 namespace Com\PaulDevelop\Library\Application;
 
 use Com\PaulDevelop\Library\Common\Base;
+use Com\PaulDevelop\Library\Common\ITemplate;
 
 /**
  * FunctionMapping
@@ -30,11 +31,17 @@ class FunctionMapping extends Base implements IMapping
         $this->function = $function;
     }
 
-    public function process(Request $request)
+    /**
+     * @param Request   $request
+     * @param ITemplate $template
+     *
+     * @return mixed
+     */
+    public function process(Request $request, ITemplate $template)
     {
         /** @var \Closure $function */
         $function = $this->function;
-        return $function($request);
+        return $function($request, $this);
         //$function->__invoke($request);
         //return $this->function->__invoke($request);
     }
