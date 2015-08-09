@@ -3,7 +3,16 @@
 namespace Com\PaulDevelop\Library\Application;
 
 
-class Alias
+use Com\PaulDevelop\Library\Common\Base;
+
+/**
+ * Class Alias
+ *
+ * @package Com\PaulDevelop\Library\Application
+ * @property string $Source
+ * @property string $Target
+ */
+class Alias extends Base
 {
     // region member
     /** @var string */

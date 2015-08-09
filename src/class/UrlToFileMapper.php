@@ -31,7 +31,7 @@ class UrlToFileMapper implements IUrlMapper
     #region constructor
     public function __construct()
     {
-        $this->aliasList = new IMappingCollection();
+        $this->aliasList = new AliasCollection();
         $this->mappingList = new IMappingCollection();
     }
     #endregion
@@ -188,6 +188,10 @@ class UrlToFileMapper implements IUrlMapper
 //            }
 //        }
 
+        $request = $this->applyAliases($request);
+//        var_dump($request);
+//        die;
+
         foreach ($this->mappingList as $mapping) {
             /** @var IMapping $mapping */
             if ($this->checkPattern($mapping->getPattern(), $mapping->getSupportParseParameter(), $request)) {
@@ -258,34 +262,190 @@ class UrlToFileMapper implements IUrlMapper
         //echo 'path     : '.$request->Input->Path.PHP_EOL;
         //echo 'stripped : '.$request->StrippedPath.PHP_EOL;
         //echo '================================================'.PHP_EOL;
-        $path = '';
+        $url = '';
         if ($request->Input->Subdomains != '') {
-            $path .= $request->Input->Subdomains.'.';
+            $url .= $request->Input->Subdomains.'.';
         }
         //$path .= $request->Input->Domain;
-        $path .= $request->Input->Host;
+        $url .= $request->Input->Host;
         if ($request->Input->Port != '') {
-            $path .= ':'.$request->Input->Port;
+            $url .= ':'.$request->Input->Port;
         }
+
+
+        $path = '';
+
+
+
+
 
         if ($supportParseParameter == true) {
             if ($request->StrippedPath != '') {
-                $path .= '/'.$request->StrippedPath;
+                $path .= $request->StrippedPath;
             }
         } else {
             if ($request->Input->Path != '') {
-                $path .= '/'.$request->Input->Path;
+                $path .= $request->Input->Path;
             }
         }
+
+        $path = trim($path, "\t\n\r\0\x0B/");
+
+
+//        var_dump($path);
+
+//        $found = false;
+//        /** @var Alias $alias */
+//        foreach ($this->aliasList as $alias) {
+////            var_dump($alias->Source);
+//            if ($alias->Source == $path) {
+//                $found = true;
+//                $path = $alias->Target;
+//
+//                //RequestParser::parse()
+//                //$request = RequestParser::parse(new RequestInput(APP_URL_BASE));
+//
+////                $newUrl = $request->Input->Protocol.'://'
+////                    .($request->Input->Subdomains!='' ? $request->Input->Subdomains.'.' : ''),
+////                    .$request->Input->Domain
+////                    .$alias->Target;
+////                $newUrl = $request->Input->BaseUrl.$alias->Target;
+//                $newUrl = str_replace($alias->Source, $alias->Target, $request->Input->Url);
+////                var_dump($newUrl);
+//                $newRequest = RequestParser::parse(new RequestInput(APP_URL_BASE, $newUrl));
+//                $request->Input = $newRequest->Input;
+//                $request->FileParameter = $newRequest->FileParameter;
+//                $request->GetParameter = $newRequest->GetParameter;
+//                $request->HeaderParameter = $newRequest->HeaderParameter;
+//                $request->OriginalPath = $newRequest->OriginalPath;
+//                $request->PatchParameter = $newRequest->PatchParameter;
+//                $request->PathParameter = $newRequest->PathParameter;
+//                $request->PostParameter = $newRequest->PostParameter;
+//                $request->StrippedPath = $newRequest->StrippedPath;
+//                $request->SystemParameter = $newRequest->SystemParameter;
+//
+//
+//
+////                var_dump($request);
+////                die;
+//
+//
+////                echo "MATCH";
+//                break;
+//            }
+//        }
+
+        //die;
+
+
+
+
+
+//        if ($supportParseParameter == true) {
+//            if ($request->StrippedPath != '') {
+//                $url .= '/'.$request->StrippedPath;
+//            }
+//        } else {
+//            if ($request->Input->Path != '') {
+//                $url .= '/'.$request->Input->Path;
+//            }
+//        }
+
+
+        $url .= '/'.$path;
 
         //if ($request->StrippedPath != '') {
         //    $path .= '/'.$request->StrippedPath;
         //}
-        $path = trim($path, "\t\n\r\0\x0B/");
+        $url = trim($url, "\t\n\r\0\x0B/");
 //        var_dump($path);
         // match
-        $result = preg_match($pattern, $path);
+        $result = preg_match($pattern, $url);
 //        var_dump($result);
+        // return
+        return $result;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
+    private function getCleanPath(Request $request, $supportParseParameter = false)
+    {
+        // init
+        $result = '';
+
+        // action
+        if ($supportParseParameter == true) {
+            if ($request->StrippedPath != '') {
+                $result .= $request->StrippedPath;
+            }
+        } else {
+            if ($request->Input->Path != '') {
+                $result .= $request->Input->Path;
+            }
+        }
+
+        $result = trim($result, "\t\n\r\0\x0B/");
+
+        // return
+        return $result;
+    }
+
+
+    private function applyAliases($request)
+    {
+        // init
+        $result = $request;
+
+        // action
+        $path = $this->getCleanPath($request);
+
+//        var_dump($path);
+
+
+        /** @var Alias $alias */
+        foreach ($this->aliasList as $alias) {
+//            var_dump($alias->Source);
+            if ($alias->Source == $path) {
+//                $found = true;
+//                $path = $alias->Target;
+
+                //RequestParser::parse()
+                //$request = RequestParser::parse(new RequestInput(APP_URL_BASE));
+
+//                $newUrl = $request->Input->Protocol.'://'
+//                    .($request->Input->Subdomains!='' ? $request->Input->Subdomains.'.' : ''),
+//                    .$request->Input->Domain
+//                    .$alias->Target;
+//                $newUrl = $request->Input->BaseUrl.$alias->Target;
+                $newUrl = str_replace($alias->Source, $alias->Target, $request->Input->Url);
+//                var_dump($newUrl);
+//                $newRequest = RequestParser::parse(new RequestInput(APP_URL_BASE, $newUrl));
+                $result = RequestParser::parse(new RequestInput(APP_URL_BASE, $newUrl));
+//                $request->Input = $newRequest->Input;
+//                $request->FileParameter = $newRequest->FileParameter;
+//                $request->GetParameter = $newRequest->GetParameter;
+//                $request->HeaderParameter = $newRequest->HeaderParameter;
+//                $request->OriginalPath = $newRequest->OriginalPath;
+//                $request->PatchParameter = $newRequest->PatchParameter;
+//                $request->PathParameter = $newRequest->PathParameter;
+//                $request->PostParameter = $newRequest->PostParameter;
+//                $request->StrippedPath = $newRequest->StrippedPath;
+//                $request->SystemParameter = $newRequest->SystemParameter;
+
+
+
+//                var_dump($request);
+//                die;
+
+
+//                echo "MATCH";
+                break;
+            }
+        }
+
         // return
         return $result;
     }

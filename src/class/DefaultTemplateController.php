@@ -33,7 +33,16 @@ class DefaultTemplateController implements IController
      */
     public function process(Request $request = null, ITemplate $template = null)
     {
-        return $template->process();
+        // init
+        $result = '';
+
+        // action
+        if ( file_exists($template->TemplateFileName) ) {
+            $result = $template->process();
+        }
+
+        // return
+        return $result;
     }
     // endregion
 }
