@@ -368,6 +368,7 @@ class UrlToFileMapper implements IUrlMapper
 
     /**
      * @param Request $request
+     * @param bool    $supportParseParameter
      *
      * @return string
      */
@@ -393,8 +394,12 @@ class UrlToFileMapper implements IUrlMapper
         return $result;
     }
 
-
-    private function applyAliases($request)
+    /**
+     * @param Request $request
+     *
+     * @return Request
+     */
+    private function applyAliases(Request $request = null)
     {
         // init
         $result = $request;
