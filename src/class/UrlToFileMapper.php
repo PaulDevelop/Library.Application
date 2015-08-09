@@ -18,19 +18,78 @@ class UrlToFileMapper implements IUrlMapper
 {
     #region member
     /**
+     * @var AliasCollection
+     */
+    private $aliasList;
+
+    /**
      * @var IMappingCollection
      */
-    private $mappings;
+    private $mappingList;
     #endregion
 
     #region constructor
     public function __construct()
     {
-        $this->mappings = new IMappingCollection();
+        $this->aliasList = new IMappingCollection();
+        $this->mappingList = new IMappingCollection();
     }
     #endregion
 
     #region methods
+    /**
+     * @param string $source
+     * @param string $target
+     *
+     * @throws \Com\PaulDevelop\Library\Common\ArgumentException
+     * @throws \Com\PaulDevelop\Library\Common\TypeCheckException
+     */
+    public function addAlias($source = '', $target = '')
+    {
+        $this->aliasList->add(
+            new Alias(
+                $source,
+                $target
+            )
+        );
+    }
+
+    /**
+     * @param string      $pattern
+     * @param bool|false  $supportParseParameter
+     * @param string      $table
+     * @param string      $field
+     * @param string      $value
+     * @param string      $template
+     * @param IController $object
+     *
+     * @throws \Com\PaulDevelop\Library\Common\ArgumentException
+     * @throws \Com\PaulDevelop\Library\Common\TypeCheckException
+     *
+     */
+    public function mapDatabase(
+        $pattern = '',
+        $supportParseParameter = false,
+        $table = '',
+        $field = '',
+        $value = '',
+        $template = '',
+        IController $object = null
+    ) {
+        $this->mappingList->add(
+            new DatabaseMapping(
+                $pattern,
+                $supportParseParameter,
+                $table,
+                $field,
+                $value,
+                $template,
+                $object
+            )//,
+        //$pattern
+        );
+    }
+
     /**
      * @param string $pattern
      * @param bool   $supportParseParameter
@@ -50,7 +109,7 @@ class UrlToFileMapper implements IUrlMapper
         $controllerPath = '',
         $templatePath = ''
     ) {
-        $this->mappings->add(
+        $this->mappingList->add(
             new FolderMapping(
                 $pattern,
                 $supportParseParameter,
@@ -58,8 +117,8 @@ class UrlToFileMapper implements IUrlMapper
                 $subNamespace,
                 $controllerPath,
                 $templatePath
-            ),
-            $pattern
+            )//,
+        //$pattern
         );
     }
 
@@ -76,7 +135,14 @@ class UrlToFileMapper implements IUrlMapper
         $supportParseParameter = false,
         IController $object = null
     ) {
-        $this->mappings->add(new ClassMapping($pattern, $supportParseParameter, $object), $pattern);
+        $this->mappingList->add(
+            new ClassMapping(
+                $pattern,
+                $supportParseParameter,
+                $object
+            )//,
+        //$pattern
+        );
     }
 
     /**
@@ -92,7 +158,14 @@ class UrlToFileMapper implements IUrlMapper
         $supportParseParameter = false,
         $function = null
     ) {
-        $this->mappings->add(new FunctionMapping($pattern, $supportParseParameter, $function), $pattern);
+        $this->mappingList->add(
+            new FunctionMapping(
+                $pattern,
+                $supportParseParameter,
+                $function
+            )//,
+        //$pattern
+        );
     }
 
     /**
@@ -107,12 +180,27 @@ class UrlToFileMapper implements IUrlMapper
         $result = '';
 
         // find pattern matching path
-        foreach ($this->mappings as $mapping) {
+//        foreach ($this->mappings as $mapping) {
+//            /** @var IMapping $mapping */
+//            if ($this->checkPattern($mapping->getPattern(), $mapping->getSupportParseParameter(), $request)) {
+//                $result = $mapping->process($request, $template);
+//                break;
+//            }
+//        }
+
+        foreach ($this->mappingList as $mapping) {
             /** @var IMapping $mapping */
             if ($this->checkPattern($mapping->getPattern(), $mapping->getSupportParseParameter(), $request)) {
                 $result = $mapping->process($request, $template);
-                break;
+                if ($result != '') {
+                    break;
+                }
             }
+        }
+
+        if ($result == '') {
+            echo '404';
+            die;
         }
 
         return $result;
