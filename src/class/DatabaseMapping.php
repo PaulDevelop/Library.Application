@@ -102,7 +102,7 @@ class DatabaseMapping extends Base implements IMapping
         // init
         $result = '';
 
-        $path = $request->StrippedPath;
+        $path = $this->getCleanPath($request, $this->getSupportParseParameter());//$request->StrippedPath;
         $methodName = 'get'.ucfirst($this->table).'Peer';
 
         // search page in database
@@ -117,6 +117,28 @@ class DatabaseMapping extends Base implements IMapping
             $object = $this->object;
             $result = $object->process($request, $template);
         }
+
+        // return
+        return $result;
+    }
+
+    private function getCleanPath(Request $request, $supportParseParameter = false)
+    {
+        // init
+        $result = '';
+
+        // action
+        if ($supportParseParameter == true) {
+            if ($request->StrippedPath != '') {
+                $result .= $request->StrippedPath;
+            }
+        } else {
+            if ($request->Input->Path != '') {
+                $result .= $request->Input->Path;
+            }
+        }
+
+        $result = trim($result, "\t\n\r\0\x0B/");
 
         // return
         return $result;
