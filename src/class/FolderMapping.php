@@ -140,7 +140,7 @@ class FolderMapping extends Base implements IMapping
      *
      * @return string
      */
-    public static function getCleanUrl(Request $request)
+    public function getCleanUrl(Request $request)
     {
         $url = '';
         if ($request->Input->Subdomains != '') {
@@ -151,11 +151,37 @@ class FolderMapping extends Base implements IMapping
         if ($request->Input->Port != '') {
             $url .= ':'.$request->Input->Port;
         }
-        if ($request->StrippedPath != '') {
-            $url .= '/'.$request->StrippedPath;
+        $path = $this->getCleanPath($request, $this->getSupportParseParameter());
+//        if ($request->StrippedPath != '') {
+//            $url .= '/'.$request->StrippedPath;
+//        }
+        if ($path != '') {
+            $url .= '/'.$path;
         }
         $url = trim($url, "\t\n\r\0\x0B/");
         return $url;
+    }
+
+    private function getCleanPath(Request $request, $supportParseParameter = false)
+    {
+        // init
+        $result = '';
+
+        // action
+        if ($supportParseParameter == true) {
+            if ($request->StrippedPath != '') {
+                $result .= $request->StrippedPath;
+            }
+        } else {
+            if ($request->Input->Path != '') {
+                $result .= $request->Input->Path;
+            }
+        }
+
+        $result = trim($result, "\t\n\r\0\x0B/");
+
+        // return
+        return $result;
     }
 
     /**
