@@ -102,7 +102,8 @@ class DatabaseMapping extends Base implements IMapping
         // init
         $result = '';
 
-        $path = $this->getCleanPath($request, $this->getSupportParseParameter());//$request->StrippedPath;
+        //$path = $request->StrippedPath;
+        $path = $this->getCleanPath($request, $this->getSupportParseParameter());
         $methodName = 'get'.ucfirst($this->table).'Peer';
 
         // search page in database

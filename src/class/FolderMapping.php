@@ -71,6 +71,7 @@ class FolderMapping extends Base implements IMapping
         $templatePath = ''
     ) {
         $this->pattern = $pattern;
+        $this->supportParseParameter = $supportParseParameter;
         $this->namespaces = $namespaces;
         $this->subNamespace = $subNamespace;
         $this->controllerPath = $controllerPath;
