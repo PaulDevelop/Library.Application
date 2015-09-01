@@ -195,6 +195,11 @@ class UrlToFileMapper implements IUrlMapper
         foreach ($this->mappingList as $mapping) {
             /** @var IMapping $mapping */
             if ($this->checkPattern($mapping->getPattern(), $mapping->getSupportParseParameter(), $request)) {
+                $request = RequestParser::parse(
+                    new RequestInput($request->Input->BaseUrl),
+                    $mapping->getSupportParseParameter()
+                );
+                $template->bindVariable('request', $request->getStdClass());
                 $result = $mapping->process($request, $template);
                 if ($result != '') {
                     break;
@@ -276,9 +281,6 @@ class UrlToFileMapper implements IUrlMapper
         $path = '';
 
 
-
-
-
         if ($supportParseParameter == true) {
             if ($request->StrippedPath != '') {
                 $path .= $request->StrippedPath;
@@ -336,9 +338,6 @@ class UrlToFileMapper implements IUrlMapper
 //        }
 
         //die;
-
-
-
 
 
 //        if ($supportParseParameter == true) {
@@ -439,7 +438,6 @@ class UrlToFileMapper implements IUrlMapper
 //                $request->PostParameter = $newRequest->PostParameter;
 //                $request->StrippedPath = $newRequest->StrippedPath;
 //                $request->SystemParameter = $newRequest->SystemParameter;
-
 
 
 //                var_dump($request);
