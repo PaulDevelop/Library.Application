@@ -195,10 +195,13 @@ class UrlToFileMapper implements IUrlMapper
         foreach ($this->mappingList as $mapping) {
             /** @var IMapping $mapping */
             if ($this->checkPattern($mapping->getPattern(), $mapping->getSupportParseParameter(), $request)) {
+                // get original request with correct parseParameter setting
                 $request = RequestParser::parse(
                     new RequestInput($request->Input->BaseUrl),
                     $mapping->getSupportParseParameter()
                 );
+                $request = $this->applyAliases($request);
+
                 $template->bindVariable('request', $request->getStdClass());
                 $result = $mapping->process($request, $template);
                 if ($result != '') {
