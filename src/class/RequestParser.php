@@ -44,7 +44,7 @@ class RequestParser
                 :
                 $requestInput->Path;
 //        $strippedPath = (!$supportParseParameter) ? $originalPath : '';
-        $strippedPath = (!$supportParseParameter) ? trim($originalPath, '\t\n\r\0\x0B/') : '';
+        $strippedPath = (!$supportParseParameter) ? trim($originalPath, "\t\n\r\0\x0B/") : '';
         $pathParameter = new ParameterCollection();
         $systemParameter = new ParameterCollection();
         //$getParameter = new ParameterCollection();
