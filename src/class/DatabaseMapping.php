@@ -5,6 +5,7 @@ namespace Com\PaulDevelop\Library\Application;
 use Com\PaulDevelop\Library\Common\Base;
 use Com\PaulDevelop\Library\Common\ITemplate;
 use com\pauldevelop\template\PeerHelper;
+use com\pauldevelop\template\SessionConstants;
 
 /**
  * DatabaseMapping
@@ -91,6 +92,37 @@ class DatabaseMapping extends Base implements IMapping
     // endregion
 
     // region methods
+//    /**
+//     * @param Request   $request
+//     * @param ITemplate $template
+//     *
+//     * @return string
+//     */
+//    public function process(Request $request = null, ITemplate $template = null)
+//    {
+//        // init
+//        $result = '';
+//
+//        //$path = $request->StrippedPath;
+//        $path = $this->getCleanPath($request, $this->getSupportParseParameter());
+//        $methodName = 'get'.ucfirst($this->table).'Peer';
+//
+//        // search page in database
+//        ///** @var Page $page */
+//        $dbObj = PeerHelper::$methodName()->querySinglePath(''.$this->table.'[@'.$this->field.'='.$path.']#');
+//        if ($dbObj != null) {
+////        $template->setTemplateFileName(APP_FS_TEMPLATE.'frontend'.DIRECTORY_SEPARATOR.$this->template);
+//            $template->setTemplateFileName($this->template);
+//            $template->bindVariable('page', $dbObj->getStdClass());
+//
+//            /** @var IController $object */
+//            $object = $this->object;
+//            $result = $object->process($request, $template);
+//        }
+//
+//        // return
+//        return $result;
+//    }
     /**
      * @param Request   $request
      * @param ITemplate $template
@@ -102,21 +134,54 @@ class DatabaseMapping extends Base implements IMapping
         // init
         $result = '';
 
-        //$path = $request->StrippedPath;
-        $path = $this->getCleanPath($request, $this->getSupportParseParameter());
+        // field-value pairs
+        $fieldValueList = '';
+        if (is_array($this->field)) {
+            for ($i = 0; $i < count($this->field); $i++) {
+                $field = $this->field[$i];
+                $value = $this->value[$i];
+                $fieldValueList .= ($fieldValueList != '' ? ',' : '')
+                    .'@'.$field.'='.$this->evaluateValue($request, $value);
+            }
+        } else {
+            $fieldValueList = '@'.$this->field.'='.$this->evaluateValue($request, $this->value);
+        }
+
+//        $path = $this->getCleanPath($request, $this->getSupportParseParameter());
         $methodName = 'get'.ucfirst($this->table).'Peer';
 
         // search page in database
         ///** @var Page $page */
-        $dbObj = PeerHelper::$methodName()->querySinglePath(''.$this->table.'[@'.$this->field.'='.$path.']#');
+        $dbObj = PeerHelper::$methodName()->querySinglePath(''.$this->table.'['.$fieldValueList.']#');
         if ($dbObj != null) {
-//        $template->setTemplateFileName(APP_FS_TEMPLATE.'frontend'.DIRECTORY_SEPARATOR.$this->template);
             $template->setTemplateFileName($this->template);
             $template->bindVariable('page', $dbObj->getStdClass());
 
             /** @var IController $object */
             $object = $this->object;
             $result = $object->process($request, $template);
+        }
+
+        // return
+        return $result;
+    }
+
+    private function evaluateValue(Request $request = null, $value = '')
+    {
+        // init
+        $result = '';
+
+        // action
+        if (preg_match('/%(.*?)%/', $value, $matches)) {
+            $variableName = $matches[1];
+            if ($variableName == 'request.path') {
+                $result = $this->getCleanPath($request, $this->getSupportParseParameter());
+            } else if ($variableName == 'session.language') {
+                $language = PeerHelper::getLanguagePeer()->querySinglePath('language[@code='.$_SESSION[SessionConstants::LANGUAGE].']#');
+                $result = $language->Id;
+            }
+        } else {
+            $result = $value;
         }
 
         // return
