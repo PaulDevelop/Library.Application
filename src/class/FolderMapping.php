@@ -201,7 +201,9 @@ class FolderMapping extends Base implements IMapping
 
         // variables
         //$pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Domain), $pattern);
-        $result = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Host), $result);
+//        $result = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Host), $result);
+        $result = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Host.($request->Input->Port != '' ? ':'.$request->Input->Port : '')), $result);
+
         //$pattern = str_replace(
         //    '%baseUrl%',
         //    str_replace(
