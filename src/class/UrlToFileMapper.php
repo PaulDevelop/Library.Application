@@ -254,7 +254,7 @@ class UrlToFileMapper implements IUrlMapper
         // variables
         //$pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Domain), $pattern);
 //        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Host), $pattern);
-        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Host.($request->Input->Port != '') ? ':'.$request->Input->Port : ''), $pattern);
+        $pattern = str_replace('%baseUrl%', str_replace('.', '\.', $request->Input->Host.($request->Input->Port != '' ? ':'.$request->Input->Port : '')), $pattern);
         //$pattern = str_replace(
         //    '%baseUrl%',
         //    str_replace(
