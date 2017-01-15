@@ -167,7 +167,8 @@ class RequestInput extends Base implements IRequestInput
         }
 
         // patch parameter
-        foreach ($_GET as $key => $value) { // POST?
+        parse_str(file_get_contents('php://input'), $_PATCH);
+        foreach ($_PATCH as $key => $value) {
             $this->patchParameter->add(new Parameter($key, $value), $key);
         }
 //        /* PUT data comes in on the stdin stream */
